@@ -22,14 +22,14 @@ class gameObject
 		SDL_Rect getSource(void);
 		bool draw(TextureManager* TM);
 
-	private:
-
+	protected:
 		int mBackgroundTextureID;
 		int mTextureID;
 		int mMaxValue;
 		SDL_Rect* mDestination;
 		SDL_Rect mSource;
 		bool mReady;
+	private:
 
 		Pane* mTargetPane;
 		int mValue;
