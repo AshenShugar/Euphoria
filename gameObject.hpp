@@ -4,15 +4,6 @@
 #include <string>
 #include <fstream>
 
-class sprite
-{
-	public:
-		sprite();
-		sprite(int textureID,int x, int y, int w, int h);
-		int textureID;
-		int mx,my,mw,mh;	// destination coordinates
-		int sx,sy,sw,sh;	// source coordinates
-};
 
 class gameObject
 {
@@ -26,16 +17,21 @@ class gameObject
 		bool setValue(int value);
 		bool good(void);
 
-		int backgroundTextureID;
-		int getSpriteTID(void);
-		SDL_Rect getSpriteLocation(void);
-		SDL_Rect getSpriteSource(void);
+		int getTID(void);
+		SDL_Rect getDestination(void);
+		SDL_Rect getSource(void);
 		bool draw(TextureManager* TM);
 
 	private:
-		bool mloaded;
-		int mValue;
+
+		int mBackgroundTextureID;
+		int mTextureID;
 		int mMaxValue;
-		sprite* valueSprites;
-		Pane* targetPane;
+		SDL_Rect* mDestination;
+		SDL_Rect mSource;
+		bool mReady;
+
+		Pane* mTargetPane;
+		int mValue;
+
 };

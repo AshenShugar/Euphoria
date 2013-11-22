@@ -12,8 +12,7 @@ class gameObjectB: public gameObject
 		bool setValue(int location, int value);
 
 	private:
-		SDL_Rect* destinations;	// array
-		SDL_Rect* sources;	// array
-		int* destinationValues;	// array
+		SDL_Rect* mSources;	// array
+		int* mDestinationValues;	// array
 
 };

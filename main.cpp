@@ -240,9 +240,6 @@ int main( int argc, char* args[] )
 
 				for(int i = 0; i < 6; i++)
 				{
-					//destination = moralTrack[i].getSpriteLocation();
-					//source = moralTrack[i].getSpriteSource();
-					//gTM->RenderTextureToViewport( moralTrack[i].getSpriteTID(), *moralTrack[i].getTargetPane()->getViewport(), &destination, &source   );
 					moralTrack[i].draw(gTM);
 				}
 

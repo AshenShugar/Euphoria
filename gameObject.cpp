@@ -1,26 +1,9 @@
 #include "gameObject.hpp"
 
-sprite::sprite()
-{
-	textureID = 0;
-	mx = 0;
-	my = 0;
-	mw = 0;
-	mh = 0;
-}
-
-sprite::sprite(int tID, int x,int y,int w,int h)
-{
-	textureID = tID;
-	mx = x;
-	my = y;
-	mw = w;
-	mh = h;
-}
 
 gameObject::gameObject()
 {
-	mloaded = false;
+	mReady = false;
 }
 
 gameObject::gameObject(std::string filename)
@@ -30,13 +13,13 @@ gameObject::gameObject(std::string filename)
 
 gameObject::~gameObject()
 {
-	if(valueSprites != NULL)
-		delete[] valueSprites;
+	if(mDestination != NULL)
+		delete[] mDestination;
 }
 
 bool gameObject::good(void)
 {
-	return mloaded;
+	return mReady;
 }
 
 bool gameObject::setValue(int value)
@@ -45,52 +28,42 @@ bool gameObject::setValue(int value)
 		return false;
 	else
 		mValue = value;
+
+	return true;
 }
 
 Pane* gameObject::getTargetPane(void)
 {
-	return targetPane;
+	return mTargetPane;
 }
 
 bool gameObject::setTargetPane(Pane* target)
 {
 	if(target == NULL)
 	{
-		targetPane = NULL;
-		mloaded = false;
+		mTargetPane = NULL;
+		mReady = false;
+		return false;
 	}
 	else
-		targetPane = target;
+		mTargetPane = target;
 
-	return mloaded;
+	return true;
 }
 
-int gameObject::getSpriteTID(void)
+int gameObject::getTID(void)
 {
-	return valueSprites[mValue].textureID;
+	return mTextureID;
 }
 
-SDL_Rect gameObject::getSpriteLocation(void)
+SDL_Rect gameObject::getDestination(void)
 {
-	SDL_Rect tmpR;
-
-	tmpR.x = valueSprites[mValue].mx;
-	tmpR.y = valueSprites[mValue].my;
-	tmpR.w = valueSprites[mValue].mw;
-	tmpR.h = valueSprites[mValue].mh;
-
-	return tmpR;
+	return mDestination[mValue];
 }
 
-SDL_Rect gameObject::getSpriteSource(void)
+SDL_Rect gameObject::getSource(void)
 {
-	SDL_Rect tmpR;
-	tmpR.x = valueSprites[mValue].sx;
-	tmpR.y = valueSprites[mValue].sy;
-	tmpR.w = valueSprites[mValue].sw;
-	tmpR.h = valueSprites[mValue].sh;
-
-	return tmpR;
+	return mSource;
 }
 
 
@@ -98,18 +71,18 @@ SDL_Rect gameObject::getSpriteSource(void)
 void gameObject::LoadObjectFromFile(std::string filename)
 {
 	std::ifstream objectInfo( filename.c_str() );
-	int iNumSprites, iLine;
+	int iNumDestinations, iLine;
 	std::string spriteInfo;
 	int textureId;
 	bool bResult = true;
 
 	if(objectInfo == NULL)
 	{
-		mloaded = false;
+		mReady = false;
 		return;
 	}
 
-	objectInfo >> iNumSprites;
+	objectInfo >> iNumDestinations;
 
 	if (objectInfo.fail() )
 	{
@@ -117,96 +90,105 @@ void gameObject::LoadObjectFromFile(std::string filename)
 	}
 	else
 	{
-		mMaxValue = iNumSprites;
-		valueSprites = new sprite[iNumSprites];
+		mMaxValue = iNumDestinations;
+		mDestination = new SDL_Rect[iNumDestinations];
 
-		if(valueSprites == NULL)
+		if(mDestination == NULL)
 		{
 			bResult = false;
 		}
 		else
 		{
-			objectInfo >> backgroundTextureID;
+			objectInfo >> mBackgroundTextureID;
 			if(objectInfo.fail())
 			{
 				bResult = false;
 			}
 			else
 			{
-				for(iLine = 0; iLine < iNumSprites; iLine++)
+				objectInfo >> mTextureID;
+				if(objectInfo.fail())
 				{
-					objectInfo >> valueSprites[iLine].textureID;
+					bResult = false;
+				}
+				else
+				{
+					objectInfo >> mSource.x;
 					if( objectInfo.fail() )
 					{
-						bResult = false;
-						break;
+						objectInfo.close();
+						mReady = false;
+						return;
+					}
+					objectInfo >> mSource.y;
+					if( objectInfo.fail() )
+					{
+						objectInfo.close();
+						mReady = false;
+						return;
+					}
+					objectInfo >> mSource.w;
+					if( objectInfo.fail() )
+					{
+						objectInfo.close();
+						mReady = false;
+						return;
+					}
+					objectInfo >> mSource.h;
+					if( objectInfo.fail() )
+					{
+						objectInfo.close();
+						mReady = false;
+						return;
 					}
 
-					objectInfo >> valueSprites[iLine].mx;
-					if( objectInfo.fail() )
+					for(iLine = 0; iLine < iNumDestinations; iLine++)
 					{
-						bResult = false;
-						break;
-					}
-					objectInfo >> valueSprites[iLine].my;
-					if( objectInfo.fail() )
-					{
-						bResult = false;
-						break;
-					}
-					objectInfo >> valueSprites[iLine].mw;
-					if( objectInfo.fail() )
-					{
-						bResult = false;
-						break;
-					}
-					objectInfo >> valueSprites[iLine].mh;
-					if( objectInfo.fail() )
-					{
-						bResult = false;
-						break;
-					}
 
-					objectInfo >> valueSprites[iLine].sx;
-					if( objectInfo.fail() )
-					{
-						bResult = false;
-						break;
+						objectInfo >> mDestination[iLine].x;
+						if( objectInfo.fail() )
+						{
+							bResult = false;
+							break;
+						}
+						objectInfo >> mDestination[iLine].y;
+						if( objectInfo.fail() )
+						{
+							bResult = false;
+							break;
+						}
+						objectInfo >> mDestination[iLine].w;
+						if( objectInfo.fail() )
+						{
+							bResult = false;
+							break;
+						}
+						objectInfo >> mDestination[iLine].h;
+						if( objectInfo.fail() )
+						{
+							bResult = false;
+							break;
+						}
 					}
-					objectInfo >> valueSprites[iLine].sy;
-					if( objectInfo.fail() )
-					{
-						bResult = false;
-						break;
-					}
-					objectInfo >> valueSprites[iLine].sw;
-					if( objectInfo.fail() )
-					{
-						bResult = false;
-						break;
-					}
-					objectInfo >> valueSprites[iLine].sh;
-					if( objectInfo.fail() )
-					{
-						bResult = false;
-						break;
-					}
-
-
 				}
 			}
 		}
 	}
 
 	objectInfo.close();
-	mloaded = bResult;
+	mReady = bResult;
 }
 
 bool gameObject::draw(TextureManager* lpTM)
 {
-	SDL_Rect destination,source;
+	SDL_Rect destination,source, viewport;
 
-	destination = getSpriteLocation();
-	source = getSpriteSource();
-	lpTM->RenderTextureToViewport( getSpriteTID(), *getTargetPane()->getViewport(), &destination, &source   );
+	destination = getDestination();
+	source = getSource();
+	viewport = *(getTargetPane())->getViewport();
+
+	if(mBackgroundTextureID != -1)
+		lpTM->RenderTextureToViewport( mBackgroundTextureID, viewport);
+	
+	lpTM->RenderTextureToViewport( getTID(), viewport, &destination, &source   );
 }
