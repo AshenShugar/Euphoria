@@ -29,9 +29,10 @@ class gameObject
 		SDL_Rect* mDestination;
 		SDL_Rect mSource;
 		bool mReady;
+		Pane* mTargetPane;
+
 	private:
 
-		Pane* mTargetPane;
 		int mValue;
 
 };

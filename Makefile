@@ -4,10 +4,13 @@ LFLAGS = -framework SDL2 -framework SDL2_image -framework SDL2_ttf
 
 all: euphoria
 
-euphoria: textureManager.o pane.o main.o gameObject.o
-	$(CC) -g $(LFLAGS) -o euphoria main.o textureManager.o pane.o gameObject.o
+euphoria: textureManager.o pane.o main.o gameObject.o gameObjectB.o
+	$(CC) -g $(LFLAGS) -o euphoria main.o textureManager.o pane.o gameObject.o gameObjectB.o
 main.o: main.cpp 
 	$(CC) $(INCFLAGS) -c main.cpp
+
+gameObjectB.o: gameObjectB.cpp gameObjectB.hpp gameObject.o gameObject.hpp
+	$(CC) $(INCFLAGS) -c gameObjectB.cpp
 
 gameObject.o: gameObject.cpp gameObject.hpp
 	$(CC) $(INCFLAGS) -c gameObject.cpp

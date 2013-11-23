@@ -5,7 +5,7 @@ class gameObjectB: public gameObject
 	public:
 		gameObjectB();
 		~gameObjectB();
-		gameObjectB(std:string filename);
+		gameObjectB(std::string filename);
 
 		void LoadObjectFromFile(std::string filename);
 		bool draw(TextureManager* TM);
@@ -14,5 +14,6 @@ class gameObjectB: public gameObject
 	private:
 		SDL_Rect* mSources;	// array
 		int* mDestinationValues;	// array
+		int mMaxDestination;
 
 };

@@ -7,7 +7,7 @@
 #include <cmath>
 #include "myEnum.hpp"
 //#include "textureManager.h"
-#include "gameObject.hpp"
+#include "gameObjectB.hpp"
 
 
 //Screen dimension constants
@@ -137,6 +137,10 @@ int main( int argc, char* args[] )
 			Pane aPane(0,0,804,700);
 			char filename[15];
 			gameObject moralTrack[6];
+			gameObjectB WasteLanderStars("wasteStars.txt");
+			gameObjectB IcariteStars("icariteStars.txt");
+			gameObjectB EuphoriaStars("euphoriaStars.txt");
+			gameObjectB SubterranStars("subStars.txt");
 
 			for(int i = 0; i<6; i++)
 			{
@@ -151,6 +155,16 @@ int main( int argc, char* args[] )
 				}
 				moralTrack[i].setValue(0);
 
+			}
+			WasteLanderStars.setTargetPane(&aPane);
+			IcariteStars.setTargetPane(&aPane);
+			EuphoriaStars.setTargetPane(&aPane);
+			SubterranStars.setTargetPane(&aPane);
+
+			if(WasteLanderStars.good() == false)
+			{
+				fprintf(stderr, "didn't load wasteStars.txt properly\n");
+				quit = true;
 			}
 
 			Uint32 tBeginning = SDL_GetTicks();
@@ -201,27 +215,56 @@ int main( int argc, char* args[] )
 
 							case SDLK_q:
 								moralTrack[selectedPlayer].setValue(0);
+								WasteLanderStars.setValue(0,selectedPlayer);
+								IcariteStars.setValue(5,selectedPlayer);
+								EuphoriaStars.setValue(0,selectedPlayer);
+								SubterranStars.setValue(4,selectedPlayer);
 								break;		
 
 							case SDLK_w:
 								moralTrack[selectedPlayer].setValue(1);
+								WasteLanderStars.setValue(1,selectedPlayer);
+								IcariteStars.setValue(4,selectedPlayer);
+								EuphoriaStars.setValue(1,selectedPlayer);
+								SubterranStars.setValue(0,selectedPlayer);
 								break;
 
 							case SDLK_e:
 								moralTrack[selectedPlayer].setValue(2);
+								WasteLanderStars.setValue(2,selectedPlayer);
+								IcariteStars.setValue(3,selectedPlayer);
+								EuphoriaStars.setValue(2,selectedPlayer);
+								SubterranStars.setValue(2,selectedPlayer);
 								break;
 
 							case SDLK_r:
 								moralTrack[selectedPlayer].setValue(3);
+								WasteLanderStars.setValue(3,selectedPlayer);
+								IcariteStars.setValue(2,selectedPlayer);
+								EuphoriaStars.setValue(3,selectedPlayer);
+								SubterranStars.setValue(5,selectedPlayer);
 								break;
 						
 							case SDLK_t:
 								moralTrack[selectedPlayer].setValue(4);
+								WasteLanderStars.setValue(4,selectedPlayer);
+								IcariteStars.setValue(1,selectedPlayer);
+								EuphoriaStars.setValue(4,selectedPlayer);
+								SubterranStars.setValue(1,selectedPlayer);
 								break;
 												
 							case SDLK_y:
 								moralTrack[selectedPlayer].setValue(5);
+								WasteLanderStars.setValue(5,selectedPlayer);
+								IcariteStars.setValue(0,selectedPlayer);
+								EuphoriaStars.setValue(5,selectedPlayer);
+								SubterranStars.setValue(3,selectedPlayer);
 								break;
+							case SDLK_u:
+								WasteLanderStars.setValue(selectedPlayer,-1);
+								IcariteStars.setValue(selectedPlayer,-1);
+								EuphoriaStars.setValue(selectedPlayer,-1);
+								SubterranStars.setValue(selectedPlayer,-1);
 
 						}
 					}
@@ -242,8 +285,10 @@ int main( int argc, char* args[] )
 				{
 					moralTrack[i].draw(gTM);
 				}
-
-
+				WasteLanderStars.draw(gTM);
+				IcariteStars.draw(gTM);
+				EuphoriaStars.draw(gTM);
+				SubterranStars.draw(gTM);
 
 				//Update screen
 				SDL_RenderPresent( gRenderer );
