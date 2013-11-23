@@ -4,19 +4,20 @@ LFLAGS = -framework SDL2 -framework SDL2_image -framework SDL2_ttf
 
 all: euphoria
 
-euphoria: textureManager.o pane.o main.o gameObject.o gameObjectB.o
-	$(CC) -g $(LFLAGS) -o euphoria main.o textureManager.o pane.o gameObject.o gameObjectB.o
-main.o: main.cpp 
+euphoria: textureManager.o pane.o sprite.o gameLocation.o main.o
+	$(CC) -g $(LFLAGS) -o euphoria main.o textureManager.o pane.o gameLocation.o sprite.o
+main.o: main.cpp myEnum.hpp
 	$(CC) $(INCFLAGS) -c main.cpp
 
-gameObjectB.o: gameObjectB.cpp gameObjectB.hpp gameObject.o gameObject.hpp
-	$(CC) $(INCFLAGS) -c gameObjectB.cpp
+gameLocation.o: gameLocation.cpp gameLocation.hpp sprite.o
+	$(CC) $(INCFLAGS) -c gameLocation.cpp
 
-gameObject.o: gameObject.cpp gameObject.hpp
-	$(CC) $(INCFLAGS) -c gameObject.cpp
-
-pane.o: pane.hpp pane.cpp
+pane.o: pane.hpp pane.cpp myEnum.hpp
 	$(CC) $(INCFLAGS) -c pane.cpp
 
-textureManager.o: textureManager.cpp textureManager.h
+sprite.o: sprite.cpp sprite.hpp myEnum.hpp
+	$(CC) $(INCFLAGS) -c sprite.cpp
+
+
+textureManager.o: textureManager.cpp textureManager.hpp myEnum.hpp
 	$(CC) $(INCFLAGS) -c textureManager.cpp

@@ -1,4 +1,3 @@
-#include "myEnum.hpp"
 #include "pane.hpp"
 
 myEDGE Pane::oppositeEdge(myEDGE edge)

@@ -1,7 +1,9 @@
-#include <SDL.h>
+#include "myEnum.hpp"
+#include <SDL.H>
 #include <SDL_image.h>
 #include <string>
 #include <fstream>
+
 
 class TextureItem
 {

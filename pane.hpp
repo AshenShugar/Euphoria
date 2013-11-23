@@ -1,5 +1,5 @@
-#include <SDL.h>
 #include "myEnum.hpp"
+#include <SDL.h>
 
 class Pane
 {

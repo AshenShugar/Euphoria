@@ -1,14 +1,15 @@
 
 //Using SDL, SDL_image, standard IO, math, and strings
+
+#include <string>
+#include <fstream>
 #include <SDL.h>
 #include <SDL_image.h>
 #include <stdio.h>
-#include <string>
 #include <cmath>
-#include "myEnum.hpp"
-//#include "textureManager.h"
-#include "gameObjectB.hpp"
 
+#include "myEnum.hpp"
+#include "gameLocation.hpp"
 
 //Screen dimension constants
 const int SCREEN_WIDTH = 1024;
@@ -18,13 +19,14 @@ SDL_Renderer* gRenderer = NULL;
 TextureManager* gTM;	// manages loading and freeing all textures
 //The window we'll be rendering to
 SDL_Window* gWindow = NULL;
-
+int gMousex,gMousey, gMouseState;
 //The window renderer
 
 bool init()
 {
 	//Initialization flag
 	bool success = true;
+	gMouseState = 0;
 
 	//Initialize SDL
 	if( SDL_Init( SDL_INIT_VIDEO ) < 0 )
@@ -82,6 +84,29 @@ bool init()
 	return success;
 }
 
+void mouseEvent(SDL_Event* e)
+{
+	if( e->type == SDL_MOUSEMOTION || e->type == SDL_MOUSEBUTTONDOWN || e->type == SDL_MOUSEBUTTONUP )
+	{
+		//Get mouse position
+		SDL_GetMouseState( &gMousex, &gMousey );
+
+
+		//Set mouse over sprite
+		switch( e->type )
+		{
+			case SDL_MOUSEBUTTONDOWN:
+			gMouseState = 1;
+			break;
+				
+			case SDL_MOUSEBUTTONUP:
+			gMouseState = 0;
+			fprintf(stderr,"x=%d,y=%d\n",gMousex,gMousey);
+			break;
+		}
+
+	}
+}
 
 bool loadMedia()
 {
@@ -136,36 +161,33 @@ int main( int argc, char* args[] )
 			SDL_Rect destination,source;
 			Pane aPane(0,0,804,700);
 			char filename[15];
-			gameObject moralTrack[6];
-			gameObjectB WasteLanderStars("wasteStars.txt");
-			gameObjectB IcariteStars("icariteStars.txt");
-			gameObjectB EuphoriaStars("euphoriaStars.txt");
-			gameObjectB SubterranStars("subStars.txt");
+			gameLocation moralTrack[6];
+			gameLocation WasteLanderStars("wasteStars.txt");
+			gameLocation IcariteStars("icariteStars.txt");
+			gameLocation EuphoriaStars("euphoriaStars.txt");
+			gameLocation SubterranStars("subStars.txt");
+			sprites playerStars("playerStars.txt");
+			//sprites playerDice("dice.txt");
 
 			for(int i = 0; i<6; i++)
 			{
 				sprintf(filename, "moralTrack%d.txt",i);
 				std::string filenameX = filename;
-				moralTrack[i]. LoadObjectFromFile(filenameX);
+				moralTrack[i].LoadFromFile(filenameX);
 				moralTrack[i].setTargetPane(&aPane);
-				if (moralTrack[i].good() == false)
-				{
-					quit = true;
-					break;
-				}
+				moralTrack[i].setSourceArray(&playerStars);
+				moralTrack[i].setDefaultSource(i);
 				moralTrack[i].setValue(0);
-
 			}
 			WasteLanderStars.setTargetPane(&aPane);
 			IcariteStars.setTargetPane(&aPane);
 			EuphoriaStars.setTargetPane(&aPane);
 			SubterranStars.setTargetPane(&aPane);
 
-			if(WasteLanderStars.good() == false)
-			{
-				fprintf(stderr, "didn't load wasteStars.txt properly\n");
-				quit = true;
-			}
+			WasteLanderStars.setSourceArray(&playerStars);
+			IcariteStars.setSourceArray(&playerStars);
+			EuphoriaStars.setSourceArray(&playerStars);
+			SubterranStars.setSourceArray(&playerStars);
 
 			Uint32 tBeginning = SDL_GetTicks();
 			Uint32 tDelta = 0;
@@ -182,6 +204,7 @@ int main( int argc, char* args[] )
 				//Handle events on queue
 				while( SDL_PollEvent( &e ) != 0 )
 				{
+					mouseEvent(&e);
 					//User requests quit
 					if( e.type == SDL_QUIT )
 					{
@@ -289,6 +312,25 @@ int main( int argc, char* args[] )
 				IcariteStars.draw(gTM);
 				EuphoriaStars.draw(gTM);
 				SubterranStars.draw(gTM);
+
+				if(gMouseState == 1)
+				{
+					SDL_Rect destination;
+					SDL_Rect source;
+					SDL_Rect viewport = *aPane.getViewport();
+	
+					source.x = 0;
+					source.y = 0;
+					source.w = 14;
+					source.h = 14;
+
+					destination.x = gMousex;
+					destination.y = gMousey;
+					destination.w = source.w;
+					destination.h = source.h;
+
+					gTM->RenderTextureToViewport( 11, viewport, &destination, &source   );
+				}
 
 				//Update screen
 				SDL_RenderPresent( gRenderer );

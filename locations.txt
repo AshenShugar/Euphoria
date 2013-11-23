@@ -1,0 +1,56 @@
+Wind Salon = 265,51
+Nimbus Loft = 364,25
+Breeze Bar = 456,25
+Skyy Lounge = 547,25
+Incenerator of Historical Accuracy = 91,234
+Euphoria Tunnel = 54,325
+EuphoriaFactory1Use = 218,225
+EuphoriaFactory2Use = 219,314
+EF1BuildA = 141,223
+EF1BuildB = 140,245
+EF1BuildC = 141,267
+EF1BuildD = 141,289
+EF2BuildA = 141,312
+EF2BuildB = 141,335
+EF2BuildC = 141,358
+EF2BuildD = 141,380
+Generator = 275,332 -> 299,372
+EuphoriaTunnelEnd = 177, 446
+
+Ark of Fractured Memories = 503,224
+Wastelander Tunnel = 587,410
+WasteFactory1Use = 628,215
+WasteFactory2Use = 627,306
+WF1BuildA = 549,211
+WF1BuildB = 549,233
+WF1BuildC = 549,255
+WF1BuildD = 549,277
+WF2BuildA = 549,303
+WF2BuildB = 549,325
+WF2BuildC = 549,347
+WF2BuildD = 549,369
+Farm = 671,312 -> 697,364
+WasteTunnelEnd = 379,449
+
+Free Press of Harsh Reality = 184,530
+Subterran Tunnel = 516,544
+SubFactory1Use = 310,518
+SubFactory2Use = 310,608
+SF1BuildA = 232,515
+SF1BuildB = 232,537
+SF1BuildC = 232,559
+SF1BuildD = 232,581
+SF2BuildA = 232,605
+SF2BuildB = 232,627
+SF2BuildC = 232,649
+SF2BuildD = 232,671
+Aquifer = 358,615->382,667
+SubTunnelEnd = 679,438
+
+WorkerActivationTankPower = 39,629
+WorkerActivationTankWater = 97,629
+
+EuphoriaTrack = 584,578-> 768,578
+SubTrack = 584,605 -> 768,605
+WasteTrack = 584,632 -> 768,632
+IcariteTrack = 584,659 -> 768,659
