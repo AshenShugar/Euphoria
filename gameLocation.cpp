@@ -47,6 +47,11 @@ bool gameLocation::setValue(int destinationID, int sourceID)
 {
 	if(destinationID >= mMaxDestination || sourceID >= mSource->getSourceCount())	
 		return false;
+	else if(mDestinationSource == NULL)
+	{
+		fprintf(stderr, "mDestinationSource was NULL for game location '%s': (setValue(%d,%d);)",mFilename.c_str(), destinationID, sourceID);
+		return false;
+	}
 	else
 		mDestinationSource[destinationID] = sourceID;
 
@@ -55,9 +60,12 @@ bool gameLocation::setValue(int destinationID, int sourceID)
 
 bool gameLocation::setDefaultSource(int sourceID)
 {
-	if(sourceID >= mSource->getSourceCount() )
-		return false;
-
+	// allow it to be set even if the sources haven't been set.  Just double check it when they are set.
+	if(mSource != NULL)
+	{
+		if(sourceID >= mSource->getSourceCount() )
+			return false;
+	}
 	mDefaultSource = sourceID;
 	return true;
 }
@@ -91,6 +99,13 @@ bool gameLocation::setValueS(int sourceID)
 void gameLocation::setSourceArray(sprites* source)
 {
 	mSource = source;
+	if (source != NULL)
+	{
+		if(mSource->getSourceCount() <= mDefaultSource)
+		{
+			mDefaultSource = -1;
+		}
+	}
 }
 
 Pane* gameLocation::getTargetPane(void)
@@ -118,6 +133,35 @@ SDL_Rect* gameLocation::getSource(int sourceID)
 	return mSource->getSource(sourceID);
 }
 
+int gameLocation::isTargeted(int x, int y)
+{
+	int i;
+	int iDestinationID = -1;
+
+	if(mDestination == NULL)
+	{
+		fprintf(stderr,"game location (%s) not loaded correctly! ", mFilename.c_str());
+		iDestinationID = -2;
+	}
+	else
+	{
+	for( i = 0; i < mMaxDestination; i++)
+	{
+		if(x < mDestination[i].x)
+			continue;
+		if(x > (mDestination[i].x + mDestination[i].w) )
+			continue;
+		if(y < mDestination[i].y)
+			continue;
+		if(y > (mDestination[i].y + mDestination[i].h) )
+			continue;
+
+		iDestinationID = i;
+		break;
+	}
+	}
+	return iDestinationID;
+}
 
 void gameLocation::LoadFromFile(std::string filename)
 {
@@ -125,6 +169,7 @@ void gameLocation::LoadFromFile(std::string filename)
 	int iNumDestinations, iLine;
 
 	bool bResult = true;
+	mFilename = filename;
 
 	if(objectInfo == NULL)
 	{
@@ -192,6 +237,7 @@ void gameLocation::LoadFromFile(std::string filename)
 			mDestinationSource = NULL;
 		}
 	}
+
 	objectInfo.close();
 }
 

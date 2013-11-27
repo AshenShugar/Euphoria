@@ -2,6 +2,7 @@ Wind Salon = 265,51
 Nimbus Loft = 364,25
 Breeze Bar = 456,25
 Skyy Lounge = 547,25
+Clound Mine = 583,35 -> 607,75
 Incenerator of Historical Accuracy = 91,234
 Euphoria Tunnel = 54,325
 EuphoriaFactory1Use = 218,225
@@ -50,7 +51,7 @@ SubTunnelEnd = 679,438
 WorkerActivationTankPower = 39,629
 WorkerActivationTankWater = 97,629
 
-EuphoriaTrack = 584,578-> 768,578
+EuphoriaTrack = 586,578-> 766,578
 SubTrack = 584,605 -> 768,605
 WasteTrack = 584,632 -> 768,632
 IcariteTrack = 584,659 -> 768,659

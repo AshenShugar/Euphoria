@@ -20,6 +20,12 @@ TextureManager* gTM;	// manages loading and freeing all textures
 //The window we'll be rendering to
 SDL_Window* gWindow = NULL;
 int gMousex,gMousey, gMouseState;
+
+gameLocation boardLocation[NUMLOCALS];
+
+gameLocation* targetedLocal;
+int targetDestinationID;
+
 //The window renderer
 
 bool init()
@@ -101,7 +107,6 @@ void mouseEvent(SDL_Event* e)
 				
 			case SDL_MOUSEBUTTONUP:
 			gMouseState = 0;
-			fprintf(stderr,"x=%d,y=%d\n",gMousex,gMousey);
 			break;
 		}
 
@@ -161,33 +166,78 @@ int main( int argc, char* args[] )
 			SDL_Rect destination,source;
 			Pane aPane(0,0,804,700);
 			char filename[15];
-			gameLocation moralTrack[6];
-			gameLocation WasteLanderStars("wasteStars.txt");
-			gameLocation IcariteStars("icariteStars.txt");
-			gameLocation EuphoriaStars("euphoriaStars.txt");
-			gameLocation SubterranStars("subStars.txt");
+
+			boardLocation[WASTESTARS].LoadFromFile("wasteStars.txt");
+			boardLocation[ICARITESTARS].LoadFromFile("icariteStars.txt");
+			boardLocation[EUPHORIASTARS].LoadFromFile("euphoriaStars.txt");
+			boardLocation[SUBSTARS].LoadFromFile("subStars.txt");
+			boardLocation[EF1].LoadFromFile("ef1.txt");
+			boardLocation[EF2].LoadFromFile("ef2.txt");
+
+	boardLocation[WF1].LoadFromFile("wf1.txt");
+	boardLocation[WF2].LoadFromFile("wf2.txt");
+	boardLocation[SF1].LoadFromFile("sf1.txt");
+	boardLocation[SF2].LoadFromFile("sf2.txt");
+	boardLocation[IF1U].LoadFromFile("if1u.txt");
+	boardLocation[IF2U].LoadFromFile("if2u.txt");
+	boardLocation[IF3U].LoadFromFile("if3u.txt");
+	boardLocation[WIND_SALON].LoadFromFile("iwindsalon.txt");
+	boardLocation[CLOUD_MINE].LoadFromFile("imine.txt");
+	boardLocation[IoHA].LoadFromFile("eioha.txt");
+	boardLocation[ETUNNEL].LoadFromFile("edig.txt");
+	boardLocation[EF1U].LoadFromFile("ef1u.txt");
+	boardLocation[EF2U].LoadFromFile("ef2u.txt");
+	boardLocation[GENERATOR].LoadFromFile("egenerator.txt");
+	boardLocation[ETUNNELU].LoadFromFile("etu.txt");
+	boardLocation[AoFM].LoadFromFile("waofm.txt");
+	boardLocation[WTUNNEL].LoadFromFile("wdig.txt");
+	boardLocation[WF1U].LoadFromFile("wf1u.txt");
+	boardLocation[WF2U].LoadFromFile("wf2u.txt");
+	boardLocation[FARM].LoadFromFile("wfarm.txt");
+	boardLocation[WTUNNELU].LoadFromFile("wtu.txt");
+	boardLocation[FPoHR].LoadFromFile("sfpohr.txt");
+	boardLocation[SUBTUNNEL].LoadFromFile("sdig.txt");
+	boardLocation[SF1U].LoadFromFile("sf1u.txt");
+	boardLocation[SF2U].LoadFromFile("sf2u.txt");
+	boardLocation[AQUIFER].LoadFromFile("saquifer.txt");
+	boardLocation[SUBTUNNELU].LoadFromFile("stu.txt");
+	boardLocation[WORKER_ACTIVATE].LoadFromFile("workeractivate.txt");
+	boardLocation[E_TRACK].LoadFromFile("etrack.txt");
+	boardLocation[S_TRACK].LoadFromFile("strack.txt");
+	boardLocation[W_TRACK].LoadFromFile("wtrack.txt");
+	boardLocation[I_TRACK].LoadFromFile("itrack.txt");
+
 			sprites playerStars("playerStars.txt");
-			//sprites playerDice("dice.txt");
+			sprites playerDice("dice.txt");
+			
+			targetedLocal = NULL;
+			targetDestinationID = -1;
 
 			for(int i = 0; i<6; i++)
 			{
 				sprintf(filename, "moralTrack%d.txt",i);
 				std::string filenameX = filename;
-				moralTrack[i].LoadFromFile(filenameX);
-				moralTrack[i].setTargetPane(&aPane);
-				moralTrack[i].setSourceArray(&playerStars);
-				moralTrack[i].setDefaultSource(i);
-				moralTrack[i].setValue(0);
-			}
-			WasteLanderStars.setTargetPane(&aPane);
-			IcariteStars.setTargetPane(&aPane);
-			EuphoriaStars.setTargetPane(&aPane);
-			SubterranStars.setTargetPane(&aPane);
+				boardLocation[i].LoadFromFile(filenameX);
+				boardLocation[i].setDefaultSource(i);
+				boardLocation[i].setValue(0);
 
-			WasteLanderStars.setSourceArray(&playerStars);
-			IcariteStars.setSourceArray(&playerStars);
-			EuphoriaStars.setSourceArray(&playerStars);
-			SubterranStars.setSourceArray(&playerStars);
+				sprintf(filename, "brainTrack%d.txt",i);
+				filenameX = filename;
+				boardLocation[i+6].LoadFromFile(filenameX);
+				boardLocation[i+6].setDefaultSource(i);
+				boardLocation[i+6].setValue(0);
+			}
+
+			for(int i = 0; i < NUMLOCALS; i++)
+			{
+				boardLocation[i].setTargetPane(&aPane);
+				if(i < 15)
+					boardLocation[i].setSourceArray(&playerStars);
+				else
+					boardLocation[i].setSourceArray(&playerDice);
+
+			}
+
 
 			Uint32 tBeginning = SDL_GetTicks();
 			Uint32 tDelta = 0;
@@ -236,59 +286,6 @@ int main( int argc, char* args[] )
 								selectedPlayer = 5;
 								break;
 
-							case SDLK_q:
-								moralTrack[selectedPlayer].setValue(0);
-								WasteLanderStars.setValue(0,selectedPlayer);
-								IcariteStars.setValue(5,selectedPlayer);
-								EuphoriaStars.setValue(0,selectedPlayer);
-								SubterranStars.setValue(4,selectedPlayer);
-								break;		
-
-							case SDLK_w:
-								moralTrack[selectedPlayer].setValue(1);
-								WasteLanderStars.setValue(1,selectedPlayer);
-								IcariteStars.setValue(4,selectedPlayer);
-								EuphoriaStars.setValue(1,selectedPlayer);
-								SubterranStars.setValue(0,selectedPlayer);
-								break;
-
-							case SDLK_e:
-								moralTrack[selectedPlayer].setValue(2);
-								WasteLanderStars.setValue(2,selectedPlayer);
-								IcariteStars.setValue(3,selectedPlayer);
-								EuphoriaStars.setValue(2,selectedPlayer);
-								SubterranStars.setValue(2,selectedPlayer);
-								break;
-
-							case SDLK_r:
-								moralTrack[selectedPlayer].setValue(3);
-								WasteLanderStars.setValue(3,selectedPlayer);
-								IcariteStars.setValue(2,selectedPlayer);
-								EuphoriaStars.setValue(3,selectedPlayer);
-								SubterranStars.setValue(5,selectedPlayer);
-								break;
-						
-							case SDLK_t:
-								moralTrack[selectedPlayer].setValue(4);
-								WasteLanderStars.setValue(4,selectedPlayer);
-								IcariteStars.setValue(1,selectedPlayer);
-								EuphoriaStars.setValue(4,selectedPlayer);
-								SubterranStars.setValue(1,selectedPlayer);
-								break;
-												
-							case SDLK_y:
-								moralTrack[selectedPlayer].setValue(5);
-								WasteLanderStars.setValue(5,selectedPlayer);
-								IcariteStars.setValue(0,selectedPlayer);
-								EuphoriaStars.setValue(5,selectedPlayer);
-								SubterranStars.setValue(3,selectedPlayer);
-								break;
-							case SDLK_u:
-								WasteLanderStars.setValue(selectedPlayer,-1);
-								IcariteStars.setValue(selectedPlayer,-1);
-								EuphoriaStars.setValue(selectedPlayer,-1);
-								SubterranStars.setValue(selectedPlayer,-1);
-
 						}
 					}
 				}
@@ -304,32 +301,39 @@ int main( int argc, char* args[] )
 
 				gTM->RenderTextureToViewport(0, *aPane.getViewport());
 
-				for(int i = 0; i < 6; i++)
+				for(int i = 0; i < NUMLOCALS; i++)
 				{
-					moralTrack[i].draw(gTM);
+					boardLocation[i].draw(gTM);
 				}
-				WasteLanderStars.draw(gTM);
-				IcariteStars.draw(gTM);
-				EuphoriaStars.draw(gTM);
-				SubterranStars.draw(gTM);
 
-				if(gMouseState == 1)
+
+				if(gMouseState == 1 && targetDestinationID == -1)
 				{
-					SDL_Rect destination;
-					SDL_Rect source;
-					SDL_Rect viewport = *aPane.getViewport();
-	
-					source.x = 0;
-					source.y = 0;
-					source.w = 14;
-					source.h = 14;
+					fprintf(stderr,"x=%d,y=%d\n",gMousex,gMousey);
 
-					destination.x = gMousex;
-					destination.y = gMousey;
-					destination.w = source.w;
-					destination.h = source.h;
+					for( int i=0; i < NUMLOCALS; i++)
+					{
+						targetDestinationID = boardLocation[i].isTargeted(gMousex,gMousey);
+						if(targetDestinationID > -1)
+						{
+							targetedLocal = &boardLocation[i];
+							break;
+						}
+						else if( targetDestinationID == -2)
+						{
+							fprintf(stderr, "bad i = %d!\n", i);
+						}
+					}
+				}
 
-					gTM->RenderTextureToViewport( 11, viewport, &destination, &source   );
+				if(gMouseState == 0 && targetDestinationID > -1)
+				{
+					if(targetedLocal->isTargeted(gMousex,gMousey) != - 1)
+						targetedLocal->setValue(targetDestinationID, selectedPlayer);
+
+					targetedLocal = NULL;
+					targetDestinationID = -1;	// reset mouse
+
 				}
 
 				//Update screen

@@ -18,11 +18,14 @@ class gameLocation
 		void setSourceArray(sprites* source);
 		bool setDefaultSource(int defaultSourceID);
 
+		int isTargeted(int x, int y);
+
 		bool setValue(int destinationID, int sourceID); 
 		bool setValue(int destinationID); // Assume only 1 source
 		bool setValueS(int); // Assume only 1 destination
 		bool good(void);
 		bool draw(TextureManager* TM);
+		std::string mFilename;
 
 	protected:
 		Pane* getTargetPane(void);
