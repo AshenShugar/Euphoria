@@ -24,7 +24,7 @@ class gameLocation
 		bool setValue(int destinationID); // Assume only 1 source
 		bool setValueS(int); // Assume only 1 destination
 		bool good(void);
-		bool draw(TextureManager* TM);
+		virtual bool draw(TextureManager* TM);
 		std::string mFilename;
 
 	protected:

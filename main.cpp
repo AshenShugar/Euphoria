@@ -9,7 +9,8 @@
 #include <cmath>
 
 #include "myEnum.hpp"
-#include "gameLocation.hpp"
+//#include "gameLocation.hpp"
+#include "mto1gLocation.hpp"
 
 //Screen dimension constants
 const int SCREEN_WIDTH = 1024;
@@ -21,9 +22,10 @@ TextureManager* gTM;	// manages loading and freeing all textures
 SDL_Window* gWindow = NULL;
 int gMousex,gMousey, gMouseState;
 
-gameLocation boardLocation[NUMLOCALS];
+gameLocation* boardLocation[NUMLOCALS];
 
 gameLocation* targetedLocal;
+Mto1gLocation* targetedLocal2;
 int targetDestinationID;
 
 //The window renderer
@@ -167,45 +169,45 @@ int main( int argc, char* args[] )
 			Pane aPane(0,0,804,700);
 			char filename[15];
 
-			boardLocation[WASTESTARS].LoadFromFile("wasteStars.txt");
-			boardLocation[ICARITESTARS].LoadFromFile("icariteStars.txt");
-			boardLocation[EUPHORIASTARS].LoadFromFile("euphoriaStars.txt");
-			boardLocation[SUBSTARS].LoadFromFile("subStars.txt");
-			boardLocation[EF1].LoadFromFile("ef1.txt");
-			boardLocation[EF2].LoadFromFile("ef2.txt");
+			boardLocation[WASTESTARS] = new gameLocation("wasteStars.txt");
+			boardLocation[ICARITESTARS] = new gameLocation("icariteStars.txt");
+			boardLocation[EUPHORIASTARS] = new gameLocation("euphoriaStars.txt");
+			boardLocation[SUBSTARS] = new gameLocation("subStars.txt");
+			boardLocation[EF1] = new gameLocation("ef1.txt");
+			boardLocation[EF2] = new gameLocation("ef2.txt");
 
-	boardLocation[WF1].LoadFromFile("wf1.txt");
-	boardLocation[WF2].LoadFromFile("wf2.txt");
-	boardLocation[SF1].LoadFromFile("sf1.txt");
-	boardLocation[SF2].LoadFromFile("sf2.txt");
-	boardLocation[IF1U].LoadFromFile("if1u.txt");
-	boardLocation[IF2U].LoadFromFile("if2u.txt");
-	boardLocation[IF3U].LoadFromFile("if3u.txt");
-	boardLocation[WIND_SALON].LoadFromFile("iwindsalon.txt");
-	boardLocation[CLOUD_MINE].LoadFromFile("imine.txt");
-	boardLocation[IoHA].LoadFromFile("eioha.txt");
-	boardLocation[ETUNNEL].LoadFromFile("edig.txt");
-	boardLocation[EF1U].LoadFromFile("ef1u.txt");
-	boardLocation[EF2U].LoadFromFile("ef2u.txt");
-	boardLocation[GENERATOR].LoadFromFile("egenerator.txt");
-	boardLocation[ETUNNELU].LoadFromFile("etu.txt");
-	boardLocation[AoFM].LoadFromFile("waofm.txt");
-	boardLocation[WTUNNEL].LoadFromFile("wdig.txt");
-	boardLocation[WF1U].LoadFromFile("wf1u.txt");
-	boardLocation[WF2U].LoadFromFile("wf2u.txt");
-	boardLocation[FARM].LoadFromFile("wfarm.txt");
-	boardLocation[WTUNNELU].LoadFromFile("wtu.txt");
-	boardLocation[FPoHR].LoadFromFile("sfpohr.txt");
-	boardLocation[SUBTUNNEL].LoadFromFile("sdig.txt");
-	boardLocation[SF1U].LoadFromFile("sf1u.txt");
-	boardLocation[SF2U].LoadFromFile("sf2u.txt");
-	boardLocation[AQUIFER].LoadFromFile("saquifer.txt");
-	boardLocation[SUBTUNNELU].LoadFromFile("stu.txt");
-	boardLocation[WORKER_ACTIVATE].LoadFromFile("workeractivate.txt");
-	boardLocation[E_TRACK].LoadFromFile("etrack.txt");
-	boardLocation[S_TRACK].LoadFromFile("strack.txt");
-	boardLocation[W_TRACK].LoadFromFile("wtrack.txt");
-	boardLocation[I_TRACK].LoadFromFile("itrack.txt");
+	boardLocation[WF1] = new gameLocation("wf1.txt");
+	boardLocation[WF2] = new gameLocation("wf2.txt");
+	boardLocation[SF1] = new gameLocation("sf1.txt");
+	boardLocation[SF2] = new gameLocation("sf2.txt");
+	boardLocation[IF1U] = new gameLocation("if1u.txt");
+	boardLocation[IF2U] = new gameLocation("if2u.txt");
+	boardLocation[IF3U] = new gameLocation("if3u.txt");
+	boardLocation[WIND_SALON] = new gameLocation("iwindsalon.txt");
+	boardLocation[CLOUD_MINE] = new Mto1gLocation("imine.txt");
+	boardLocation[IoHA] = new gameLocation("eioha.txt");
+	boardLocation[ETUNNEL] = new gameLocation("edig.txt");
+	boardLocation[EF1U] = new gameLocation("ef1u.txt");
+	boardLocation[EF2U] = new gameLocation("ef2u.txt");
+	boardLocation[GENERATOR] = new Mto1gLocation("egenerator.txt");
+	boardLocation[ETUNNELU] = new gameLocation("etu.txt");
+	boardLocation[AoFM] = new gameLocation("waofm.txt");
+	boardLocation[WTUNNEL] = new gameLocation("wdig.txt");
+	boardLocation[WF1U] = new gameLocation("wf1u.txt");
+	boardLocation[WF2U] = new gameLocation("wf2u.txt");
+	boardLocation[FARM] = new Mto1gLocation("wfarm.txt");
+	boardLocation[WTUNNELU] = new gameLocation("wtu.txt");
+	boardLocation[FPoHR] = new gameLocation("sfpohr.txt");
+	boardLocation[SUBTUNNEL] = new gameLocation("sdig.txt");
+	boardLocation[SF1U] = new gameLocation("sf1u.txt");
+	boardLocation[SF2U] = new gameLocation("sf2u.txt");
+	boardLocation[AQUIFER] = new Mto1gLocation("saquifer.txt");
+	boardLocation[SUBTUNNELU] = new gameLocation("stu.txt");
+	boardLocation[WORKER_ACTIVATE] = new gameLocation("workeractivate.txt");
+	boardLocation[E_TRACK] = new gameLocation("etrack.txt");
+	boardLocation[S_TRACK] = new gameLocation("strack.txt");
+	boardLocation[W_TRACK] = new gameLocation("wtrack.txt");
+	boardLocation[I_TRACK] = new gameLocation("itrack.txt");
 
 			sprites playerStars("playerStars.txt");
 			sprites playerDice("dice.txt");
@@ -217,24 +219,24 @@ int main( int argc, char* args[] )
 			{
 				sprintf(filename, "moralTrack%d.txt",i);
 				std::string filenameX = filename;
-				boardLocation[i].LoadFromFile(filenameX);
-				boardLocation[i].setDefaultSource(i);
-				boardLocation[i].setValue(0);
+				boardLocation[i] = new gameLocation(filenameX);
+				boardLocation[i]->setDefaultSource(i);
+				boardLocation[i]->setValue(0);
 
 				sprintf(filename, "brainTrack%d.txt",i);
 				filenameX = filename;
-				boardLocation[i+6].LoadFromFile(filenameX);
-				boardLocation[i+6].setDefaultSource(i);
-				boardLocation[i+6].setValue(0);
+				boardLocation[i+6] = new gameLocation(filenameX);
+				boardLocation[i+6]->setDefaultSource(i);
+				boardLocation[i+6]->setValue(0);
 			}
 
 			for(int i = 0; i < NUMLOCALS; i++)
 			{
-				boardLocation[i].setTargetPane(&aPane);
+				boardLocation[i]->setTargetPane(&aPane);
 				if(i < 15)
-					boardLocation[i].setSourceArray(&playerStars);
+					boardLocation[i]->setSourceArray(&playerStars);
 				else
-					boardLocation[i].setSourceArray(&playerDice);
+					boardLocation[i]->setSourceArray(&playerDice);
 
 			}
 
@@ -303,7 +305,7 @@ int main( int argc, char* args[] )
 
 				for(int i = 0; i < NUMLOCALS; i++)
 				{
-					boardLocation[i].draw(gTM);
+					boardLocation[i]->draw(gTM);
 				}
 
 
@@ -313,10 +315,11 @@ int main( int argc, char* args[] )
 
 					for( int i=0; i < NUMLOCALS; i++)
 					{
-						targetDestinationID = boardLocation[i].isTargeted(gMousex,gMousey);
+						targetDestinationID = boardLocation[i]->isTargeted(gMousex,gMousey);
 						if(targetDestinationID > -1)
 						{
-							targetedLocal = &boardLocation[i];
+							targetedLocal = boardLocation[i];
+							targetedLocal2 = (Mto1gLocation*)boardLocation[i];
 							break;
 						}
 						else if( targetDestinationID == -2)
@@ -329,8 +332,14 @@ int main( int argc, char* args[] )
 				if(gMouseState == 0 && targetDestinationID > -1)
 				{
 					if(targetedLocal->isTargeted(gMousex,gMousey) != - 1)
-						targetedLocal->setValue(targetDestinationID, selectedPlayer);
-
+					{
+						if (targetedLocal == boardLocation[CLOUD_MINE] )
+						{
+							targetedLocal2->addValue(selectedPlayer);
+						}
+						else
+							targetedLocal->setValue(targetDestinationID, selectedPlayer);
+					}
 					targetedLocal = NULL;
 					targetDestinationID = -1;	// reset mouse
 
