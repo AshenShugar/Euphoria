@@ -330,7 +330,7 @@ int main( int argc, char* args[] )
 				SDL_RenderClear( gRenderer );
 
 				gTM->RenderTextureToViewport(0, *aPane.getViewport());
-				gTM->RenderTextureToViewport(0, *bPane.getViewport());
+				gTM->RenderTextureToViewport(8, *bPane.getViewport());
 
 				for(int i = 0; i < NUMLOCALS; i++)
 				{

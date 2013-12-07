@@ -1,4 +1,4 @@
-8
+9
 0 GameBoard.png
 1 AllMarkets.png
 2 EthicalDilemmas.png
@@ -7,3 +7,4 @@
 5 Recruits.png
 6 dice.png
 7 resources.png
+8 paneTexture.png

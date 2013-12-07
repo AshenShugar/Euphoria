@@ -145,15 +145,16 @@ int gameLocation::isTargeted(int x, int y)
 	}
 	else
 	{
+		SDL_Rect* tmp = (getTargetPane())->getViewport();
 		for( i = 0; i < mMaxDestination; i++)
 		{
-			if(x < mDestination[i].x)
+			if(x < mDestination[i].x + tmp->x)
 				continue;
-			if(x > (mDestination[i].x + mDestination[i].w) )
+			if(x > (mDestination[i].x + tmp->x + mDestination[i].w) )
 				continue;
-			if(y < mDestination[i].y)
+			if(y < mDestination[i].y + tmp->y)
 				continue;
-			if(y > (mDestination[i].y + mDestination[i].h) )
+			if(y > (mDestination[i].y + tmp->y + mDestination[i].h) )
 				continue;	
 
 			iDestinationID = i;
