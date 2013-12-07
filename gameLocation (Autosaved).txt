@@ -175,6 +175,7 @@ void gameLocation::LoadFromFile(std::string filename)
 	{
 		return;
 	}
+fprintf(stderr,"File:%s\n",filename.c_str());
 
 	objectInfo >> iNumDestinations;
 

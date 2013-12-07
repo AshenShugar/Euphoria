@@ -1,13 +1,9 @@
-12
+8
 0 GameBoard.png
 1 AllMarkets.png
 2 EthicalDilemmas.png
 3 ArtifactCards.png
 4 tokensA.png
-5 RecruitsFinal1.png
-6 RecruitsFinal2.png
-7 RecruitsFinal3.png
-8 RecruitsFinal4.png
-9 RecruitsFinal5.png
-10 RecruitsFinal6.png
-11 dice.png
+5 Recruits.png
+6 dice.png
+7 resources.png

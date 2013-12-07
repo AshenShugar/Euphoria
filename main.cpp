@@ -23,6 +23,7 @@ SDL_Window* gWindow = NULL;
 int gMousex,gMousey, gMouseState;
 
 gameLocation* boardLocation[NUMLOCALS];
+gameLocation* playerStuff[ITEMCOUNT];
 
 gameLocation* targetedLocal;
 Mto1gLocation* targetedLocal2;
@@ -167,7 +168,9 @@ int main( int argc, char* args[] )
 			bool quit = false;
 			SDL_Rect destination,source;
 			Pane aPane(0,0,804,700);
+			Pane bPane(804,0,SCREEN_WIDTH - 804,700);
 			char filename[15];
+
 
 			boardLocation[WASTESTARS] = new gameLocation("wasteStars.txt");
 			boardLocation[ICARITESTARS] = new gameLocation("icariteStars.txt");
@@ -209,8 +212,20 @@ int main( int argc, char* args[] )
 	boardLocation[W_TRACK] = new gameLocation("wtrack.txt");
 	boardLocation[I_TRACK] = new gameLocation("itrack.txt");
 
+	boardLocation[PLAYER_ARTIFACTS] = new gameLocation("partifacts.txt");
+	boardLocation[PLAYER_DILEMMA] = new gameLocation("pdilemma.txt");
+	boardLocation[PLAYER_WORKERS] = new gameLocation("pworkers.txt");
+	boardLocation[PLAYER_RESOURCES] = new gameLocation("presources.txt");
+	boardLocation[PLAYER_RECRUITS] = new gameLocation("precruits.txt");
+
+
+
 			sprites playerStars("playerStars.txt");
 			sprites playerDice("dice.txt");
+			sprites playerArtifacts("artifacts.txt");
+			sprites playerDilemma("dilemmas.txt");
+			sprites playerResources("resources.txt");
+			sprites playerRecruits("recruits.txt");
 			
 			targetedLocal = NULL;
 			targetDestinationID = -1;
@@ -239,6 +254,19 @@ int main( int argc, char* args[] )
 					boardLocation[i]->setSourceArray(&playerDice);
 
 			}
+
+
+			boardLocation[PLAYER_ARTIFACTS]->setTargetPane(&bPane);
+			boardLocation[PLAYER_DILEMMA]->setTargetPane(&bPane);
+			boardLocation[PLAYER_RESOURCES]->setTargetPane(&bPane);
+			boardLocation[PLAYER_WORKERS]->setTargetPane(&bPane);
+			boardLocation[PLAYER_RECRUITS]->setTargetPane(&bPane);
+
+			boardLocation[PLAYER_ARTIFACTS]->setSourceArray(&playerArtifacts);
+			boardLocation[PLAYER_DILEMMA]->setSourceArray(&playerDilemma);
+			boardLocation[PLAYER_RESOURCES]->setSourceArray(&playerResources);
+			boardLocation[PLAYER_WORKERS]->setSourceArray(&playerDice);
+			boardLocation[PLAYER_RECRUITS]->setSourceArray(&playerRecruits);
 
 
 			Uint32 tBeginning = SDL_GetTicks();
@@ -302,6 +330,7 @@ int main( int argc, char* args[] )
 				SDL_RenderClear( gRenderer );
 
 				gTM->RenderTextureToViewport(0, *aPane.getViewport());
+				gTM->RenderTextureToViewport(0, *bPane.getViewport());
 
 				for(int i = 0; i < NUMLOCALS; i++)
 				{

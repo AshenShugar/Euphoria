@@ -1,7 +1,8 @@
 #ifndef ENUM_H_INCLUDED
 #define ENUM_H_INCLUDED
 
-const int NUMLOCALS = 50;
+const int NUMLOCALS = 55;
+const int ITEMCOUNT = 4;
 
 enum myEDGE
 {
@@ -11,6 +12,7 @@ enum myEDGE
 	TOP,
 	BOTTOM
 };
+
 
 enum BOARD_LOCATIONS
 {
@@ -63,7 +65,12 @@ enum BOARD_LOCATIONS
 	E_TRACK,
 	S_TRACK,
 	W_TRACK,
-	I_TRACK
+	I_TRACK,
+	PLAYER_ARTIFACTS,
+	PLAYER_DILEMMA,
+	PLAYER_WORKERS,
+	PLAYER_RESOURCES,
+	PLAYER_RECRUITS
 };
 
 #endif

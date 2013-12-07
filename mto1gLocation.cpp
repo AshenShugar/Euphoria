@@ -105,7 +105,7 @@ bool Mto1gLocation::draw(TextureManager* lpTM)
 		{
 			if(mSource-> getSourceCount() <= mDestinationSource[i])
 			{
-fprintf(stderr,"Something dodgy - mDestination[%d] = %d\n", i, mDestinationSource[i]);
+				fprintf(stderr,"Something dodgy - mDestination[%d] = %d\n", i, mDestinationSource[i]);
 			}
 			source = getSource(mDestinationSource[i]);
 			destination = mTmpDestinations[j];
@@ -128,7 +128,6 @@ bool Mto1gLocation::setValue(int d,int s)
 
 bool Mto1gLocation::addValue(int sourceID)
 {
-fprintf(stderr,"mNextIndex=%d,mMaxIndex=%d\n",mNextIndex,mMaxIndex);
 	if(mNextIndex > mMaxIndex)
 	{
 		// create larger array and copy the values into this new one
