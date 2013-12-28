@@ -1,7 +1,7 @@
 #ifndef ENUM_H_INCLUDED
 #define ENUM_H_INCLUDED
 
-const int NUMLOCALS = 55;
+const int NUMLOCALS = 56;
 const int ITEMCOUNT = 4;
 
 enum myEDGE
@@ -13,6 +13,15 @@ enum myEDGE
 	BOTTOM
 };
 
+enum LOCATION_TYPE
+{
+	NOTSET = 0,
+	OVtoML = 1,
+	MVtoOL = 2,
+	MVtoML = 3,
+	OVtoOL = 4,
+	MCVtoOL = 5		// Many concurrent values in one location
+};
 
 enum BOARD_LOCATIONS
 {
@@ -66,6 +75,7 @@ enum BOARD_LOCATIONS
 	S_TRACK,
 	W_TRACK,
 	I_TRACK,
+	MARKET_TILES,
 	PLAYER_ARTIFACTS,
 	PLAYER_DILEMMA,
 	PLAYER_WORKERS,

@@ -24,6 +24,9 @@ class gameLocation
 		bool setValue(int destinationID); // Assume only 1 source
 		bool setValueS(int); // Assume only 1 destination
 		bool good(void);
+		LOCATION_TYPE getType(void);
+		bool isClickable(void);
+		void setClickable(bool isClickable);
 		virtual bool draw(TextureManager* TM);
 		std::string mFilename;
 
@@ -35,8 +38,11 @@ class gameLocation
 		int mBackgroundTextureID;
 		int mMaxDestination;
 		int mDefaultSource;
+		SDL_Rect mBackgroundDestination;
 		SDL_Rect* mDestination;
 		sprites* mSource;
 		int* mDestinationSource;
 		Pane* mTargetPane;
+		LOCATION_TYPE mType;
+		bool mClickable;
 };

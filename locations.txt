@@ -55,3 +55,11 @@ EuphoriaTrack = 586,578-> 766,578
 SubTrack = 584,605 -> 768,605
 WasteTrack = 584,632 -> 768,632
 IcariteTrack = 584,659 -> 768,659
+
+
+EFActory1Tile = 164,221
+EFactory2Tile = 164,312
+WFactory1Tile = 572,211
+WFactory2Tile = 572,301
+SFactory1Tile = 255,514
+SFactory2Tile = 255,607

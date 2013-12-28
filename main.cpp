@@ -215,8 +215,9 @@ int main( int argc, char* args[] )
 	boardLocation[PLAYER_ARTIFACTS] = new gameLocation("partifacts.txt");
 	boardLocation[PLAYER_DILEMMA] = new gameLocation("pdilemma.txt");
 	boardLocation[PLAYER_WORKERS] = new gameLocation("pworkers.txt");
-	boardLocation[PLAYER_RESOURCES] = new gameLocation("presources.txt");
+	boardLocation[PLAYER_RESOURCES] = new gameLocation("presources.txt");	// change to a numberLocation (once I've made that type)
 	boardLocation[PLAYER_RECRUITS] = new gameLocation("precruits.txt");
+	boardLocation[MARKET_TILES] = new gameLocation("factoryTiles.txt");
 
 
 
@@ -226,6 +227,7 @@ int main( int argc, char* args[] )
 			sprites playerDilemma("dilemmas.txt");
 			sprites playerResources("resources.txt");
 			sprites playerRecruits("recruits.txt");
+			sprites marketTiles("FactorySprites.txt");
 			
 			targetedLocal = NULL;
 			targetDestinationID = -1;
@@ -267,6 +269,7 @@ int main( int argc, char* args[] )
 			boardLocation[PLAYER_RESOURCES]->setSourceArray(&playerResources);
 			boardLocation[PLAYER_WORKERS]->setSourceArray(&playerDice);
 			boardLocation[PLAYER_RECRUITS]->setSourceArray(&playerRecruits);
+			boardLocation[MARKET_TILES]->setSourceArray(&marketTiles);
 
 
 			Uint32 tBeginning = SDL_GetTicks();
@@ -362,7 +365,7 @@ int main( int argc, char* args[] )
 				{
 					if(targetedLocal->isTargeted(gMousex,gMousey) != - 1)
 					{
-						if (targetedLocal == boardLocation[CLOUD_MINE] )
+						if (targetedLocal->getType() == MCVtoOL )
 						{
 							targetedLocal2->addValue(selectedPlayer);
 						}

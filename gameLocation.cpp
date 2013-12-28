@@ -42,6 +42,22 @@ bool gameLocation::good(void)
 	return true;
 }
 
+LOCATION_TYPE gameLocation::getType(void)
+{
+	return mType;
+}
+
+bool gameLocation::isClickable(void)
+{
+	return mClickable;
+}
+
+void gameLocation::setClickable(bool isClickable)
+{
+	mClickable = isClickable;
+}
+
+
 // Many destinations, many Source, set one destiation to one of the sources.
 bool gameLocation::setValue(int destinationID, int sourceID)
 {
@@ -177,53 +193,86 @@ void gameLocation::LoadFromFile(std::string filename)
 		return;
 	}
 
-	objectInfo >> iNumDestinations;
-
+	objectInfo >> iLine;
+	
 	if (!objectInfo.fail() )
 	{
-		mMaxDestination = iNumDestinations;
-		mDestination = new SDL_Rect[iNumDestinations];
-		mDestinationSource = new int[iNumDestinations];
+		mType = (LOCATION_TYPE)iLine;
+		objectInfo >> iNumDestinations;
 
-		if(mDestination != NULL && mDestinationSource != NULL)
+		if (!objectInfo.fail() )
 		{
-			objectInfo >> mBackgroundTextureID;
-			if(objectInfo.fail())
+			mMaxDestination = iNumDestinations;
+			mDestination = new SDL_Rect[iNumDestinations];
+			mDestinationSource = new int[iNumDestinations];
+	
+			if(mDestination != NULL && mDestinationSource != NULL)
 			{
-				bResult = false;
-			}
-			else
-			{
-				for(iLine = 0; iLine < iNumDestinations; iLine++)
+				objectInfo >> mBackgroundTextureID;
+				if(objectInfo.fail())
 				{
-					mDestinationSource[iLine] = -1;	// initialise to "empty"
-					objectInfo >> mDestination[iLine].x;
-					if( objectInfo.fail() )
+					bResult = false;
+				}
+				else
+				{
+					if(mBackgroundTextureID != -1)
 					{
-						bResult = false;
-						break;
+						objectInfo >> mBackgroundDestination.x;
+						if(objectInfo.fail())
+						{
+							bResult = false;
+						}
+						objectInfo >> mBackgroundDestination.y;
+						if(objectInfo.fail())
+						{
+							bResult = false;
+						}
+						objectInfo >> mBackgroundDestination.w;
+						if(objectInfo.fail())
+						{
+							bResult = false;
+						}
+						objectInfo >> mBackgroundDestination.h;
+						if(objectInfo.fail())
+						{
+							bResult = false;
+						}
 					}
-					objectInfo >> mDestination[iLine].y;
-					if( objectInfo.fail() )
+					for(iLine = 0; iLine < iNumDestinations; iLine++)
 					{
-						bResult = false;
-						break;
-					}
-					objectInfo >> mDestination[iLine].w;
-					if( objectInfo.fail() )
-					{
-						bResult = false;
-						break;
-					}
-					objectInfo >> mDestination[iLine].h;
-					if( objectInfo.fail() )
-					{
-						bResult = false;
-						break;
+						mDestinationSource[iLine] = -1;	// initialise to "empty"
+						objectInfo >> mDestination[iLine].x;
+						if( objectInfo.fail() )
+						{
+							bResult = false;
+							break;
+						}
+						objectInfo >> mDestination[iLine].y;
+						if( objectInfo.fail() )
+						{
+							bResult = false;
+							break;
+						}
+						objectInfo >> mDestination[iLine].w;
+						if( objectInfo.fail() )
+						{
+							bResult = false;
+							break;
+						}
+						objectInfo >> mDestination[iLine].h;
+						if( objectInfo.fail() )
+						{
+							bResult = false;
+							break;
+						}
 					}
 				}
 			}
 		}
+	}
+	else
+	{
+		bResult = false;
 	}
 	if(bResult == false)
 	{
@@ -255,7 +304,9 @@ bool gameLocation::draw(TextureManager* lpTM)
 	viewport = *(getTargetPane())->getViewport();
 
 	if(mBackgroundTextureID != -1)
-		lpTM->RenderTextureToViewport( mBackgroundTextureID, viewport);
+	{
+		lpTM->RenderTextureToViewport( mBackgroundTextureID, viewport, &mBackgroundDestination, NULL);
+	}
 	
 	for(iID = 0; iID < mMaxDestination; iID++)
 	{
