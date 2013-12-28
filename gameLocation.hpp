@@ -1,3 +1,7 @@
+#ifndef GAMELOCATIONLOADED
+
+#define GAMELOCATIONLOADED
+
 #include "myEnum.hpp"
 #include <SDL.h>
 #include <fstream>
@@ -20,9 +24,9 @@ class gameLocation
 
 		int isTargeted(int x, int y);
 
-		bool setValue(int destinationID, int sourceID); 
-		bool setValue(int destinationID); // Assume only 1 source
-		bool setValueS(int); // Assume only 1 destination
+		virtual bool setValue(int destinationID, int sourceID); 
+		virtual bool setValue(int destinationID); // Assume only 1 source
+		virtual bool setValueS(int); // Assume only 1 destination
 		bool good(void);
 		LOCATION_TYPE getType(void);
 		bool isClickable(void);
@@ -46,3 +50,5 @@ class gameLocation
 		LOCATION_TYPE mType;
 		bool mClickable;
 };
+
+#endif

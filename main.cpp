@@ -11,6 +11,7 @@
 #include "myEnum.hpp"
 //#include "gameLocation.hpp"
 #include "mto1gLocation.hpp"
+#include "numberLocation.hpp"
 
 //Screen dimension constants
 const int SCREEN_WIDTH = 1024;
@@ -215,9 +216,11 @@ int main( int argc, char* args[] )
 	boardLocation[PLAYER_ARTIFACTS] = new gameLocation("partifacts.txt");
 	boardLocation[PLAYER_DILEMMA] = new gameLocation("pdilemma.txt");
 	boardLocation[PLAYER_WORKERS] = new gameLocation("pworkers.txt");
-	boardLocation[PLAYER_RESOURCES] = new gameLocation("presources.txt");	// change to a numberLocation (once I've made that type)
+//	boardLocation[PLAYER_RESOURCES] = new gameLocation("presources.txt");	// change to a numberLocation (once I've made that type)
+	boardLocation[PLAYER_RESOURCES] = new numberLocation("presources.txt");
 	boardLocation[PLAYER_RECRUITS] = new gameLocation("precruits.txt");
 	boardLocation[MARKET_TILES] = new gameLocation("factoryTiles.txt");
+	boardLocation[MARKET_STARS] = new gameLocation("FactoryStars.txt");
 
 
 
@@ -228,6 +231,7 @@ int main( int argc, char* args[] )
 			sprites playerResources("resources.txt");
 			sprites playerRecruits("recruits.txt");
 			sprites marketTiles("FactorySprites.txt");
+			sprites digits("numberSprites.txt");
 			
 			targetedLocal = NULL;
 			targetDestinationID = -1;
@@ -266,10 +270,27 @@ int main( int argc, char* args[] )
 
 			boardLocation[PLAYER_ARTIFACTS]->setSourceArray(&playerArtifacts);
 			boardLocation[PLAYER_DILEMMA]->setSourceArray(&playerDilemma);
-			boardLocation[PLAYER_RESOURCES]->setSourceArray(&playerResources);
+			boardLocation[PLAYER_RESOURCES]->setSourceArray(&digits);
 			boardLocation[PLAYER_WORKERS]->setSourceArray(&playerDice);
 			boardLocation[PLAYER_RECRUITS]->setSourceArray(&playerRecruits);
 			boardLocation[MARKET_TILES]->setSourceArray(&marketTiles);
+			boardLocation[MARKET_STARS]->setSourceArray(&playerStars);
+
+			((numberLocation*)(boardLocation[PLAYER_RESOURCES]))->setJustification(0,LEFT_JUSTIFY);
+			((numberLocation*)(boardLocation[PLAYER_RESOURCES]))->setJustification(1, LEFT_JUSTIFY);
+			((numberLocation*)(boardLocation[PLAYER_RESOURCES]))->setJustification(2, LEFT_JUSTIFY);
+			((numberLocation*)(boardLocation[PLAYER_RESOURCES]))->setJustification(3, LEFT_JUSTIFY);
+			boardLocation[PLAYER_RESOURCES]->setValue(0,11);
+			boardLocation[PLAYER_RESOURCES]->setValue(1,2222);
+			boardLocation[PLAYER_RESOURCES]->setValue(2,30);
+			boardLocation[PLAYER_RESOURCES]->setValue(3,100);
+			((numberLocation*)(boardLocation[PLAYER_RESOURCES]))->setJustification(4,RIGHT_JUSTIFY);
+			((numberLocation*)(boardLocation[PLAYER_RESOURCES]))->setJustification(5,RIGHT_JUSTIFY);
+			((numberLocation*)(boardLocation[PLAYER_RESOURCES]))->setJustification(6,RIGHT_JUSTIFY);
+
+			boardLocation[PLAYER_RESOURCES]->setValue(4,5098);
+			boardLocation[PLAYER_RESOURCES]->setValue(5,687);
+			boardLocation[PLAYER_RESOURCES]->setValue(6,21);
 
 
 			Uint32 tBeginning = SDL_GetTicks();
@@ -329,7 +350,7 @@ int main( int argc, char* args[] )
 				update(tDelta);
 
 				//Clear screen
-				SDL_SetRenderDrawColor( gRenderer, 0x00, 0x00, 0x00, 0xFF );
+				SDL_SetRenderDrawColor( gRenderer, 0xBB, 0xBB, 0xBB, 0xFF );
 				SDL_RenderClear( gRenderer );
 
 				gTM->RenderTextureToViewport(0, *aPane.getViewport());
@@ -370,7 +391,9 @@ int main( int argc, char* args[] )
 							targetedLocal2->addValue(selectedPlayer);
 						}
 						else
+						{
 							targetedLocal->setValue(targetDestinationID, selectedPlayer);
+						}
 					}
 					targetedLocal = NULL;
 					targetDestinationID = -1;	// reset mouse
