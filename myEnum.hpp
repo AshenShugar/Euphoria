@@ -1,7 +1,7 @@
 #ifndef ENUM_H_INCLUDED
 #define ENUM_H_INCLUDED
 
-const int NUMLOCALS = 57;
+const int NUMLOCALS = 61;
 const int ITEMCOUNT = 4;
 
 enum myEDGE
@@ -82,13 +82,25 @@ enum BOARD_LOCATIONS
 	S_TRACK,
 	W_TRACK,
 	I_TRACK,
+	ET_TRACK,
+	ST_TRACK,
+	WT_TRACK,
 	MARKET_TILES,
 	MARKET_STARS,
 	PLAYER_ARTIFACTS,
 	PLAYER_DILEMMA,
 	PLAYER_WORKERS,
 	PLAYER_RESOURCES,
-	PLAYER_RECRUITS
+	PLAYER_RECRUITS,
+	BLOCKED_LOCATIONS
+};
+
+struct myRGB
+{
+	int Red;
+	int Green;
+	int Blue;
+	bool modify;
 };
 
 #endif

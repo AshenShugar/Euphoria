@@ -28,7 +28,7 @@ class TextureManager
 		bool RenderTextureToViewport(int id, SDL_Rect viewport, SDL_Rect* dest); 
 
 		bool RenderTextureToViewport(int id, SDL_Rect viewport, SDL_Rect* dest, SDL_Rect* source); 
-	
+		void ModulateTextureColour(int id, myRGB colours);
 		SDL_Renderer *mRenderer;
 	private:
 		bool LoadTextureFromFile(int id);

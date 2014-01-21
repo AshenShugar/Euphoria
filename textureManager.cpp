@@ -45,6 +45,13 @@ TextureManager::~TextureManager(void)
 	}
 }
 
+void TextureManager::ModulateTextureColour(int Tid, myRGB colours)
+{
+	if (Tid >= iTextureCount || textureList == NULL)
+		return;
+	SDL_SetTextureColorMod( textureList[Tid].mTexture, colours.Red, colours.Green, colours.Blue );
+}
+
 // Reads in a file that has a list of files that hold textures and what id they should be given.
 bool TextureManager::LoadTextureInfoFromFile(std::string filename)
 {

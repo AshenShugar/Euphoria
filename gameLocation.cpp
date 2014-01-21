@@ -7,6 +7,7 @@ gameLocation::gameLocation()
 	mSource = NULL;
 	mTargetPane = NULL;
 	mDefaultSource = 0;
+	mColourMod = NULL;
 }
 
 gameLocation::gameLocation(std::string filename)
@@ -16,7 +17,19 @@ gameLocation::gameLocation(std::string filename)
 	mDestinationSource = NULL;
 	mTargetPane = NULL;
 	mDefaultSource = 0;
+	mColourMod = NULL;
 	LoadFromFile(filename);
+
+	if(mColourMod != NULL)
+	{
+		for(int i = 0; i < mMaxDestination; i++)
+		{
+			mColourMod[i].Red = 255;
+			mColourMod[i].Green = 255;
+			mColourMod[i].Blue = 255;
+			mColourMod[i].modify = false;
+		}
+	}
 }
 
 gameLocation::~gameLocation()
@@ -26,6 +39,9 @@ gameLocation::~gameLocation()
 
 	if(mDestinationSource != NULL)
 		delete[] mDestinationSource;
+
+	if(mColourMod != NULL)
+		delete[] mColourMod;
 }
 
 bool gameLocation::good(void)
@@ -205,8 +221,9 @@ void gameLocation::LoadFromFile(std::string filename)
 			mMaxDestination = iNumDestinations;
 			mDestination = new SDL_Rect[iNumDestinations];
 			mDestinationSource = new int[iNumDestinations];
+			mColourMod = new myRGB[iNumDestinations];
 	
-			if(mDestination != NULL && mDestinationSource != NULL)
+			if(mDestination != NULL && mDestinationSource != NULL && mColourMod != NULL)
 			{
 				objectInfo >> mBackgroundTextureID;
 				if(objectInfo.fail())
@@ -292,11 +309,41 @@ void gameLocation::LoadFromFile(std::string filename)
 	objectInfo.close();
 }
 
+void gameLocation::setColourModulation(int destinationID, int R,int G,int B)
+{
+	if( mColourMod == NULL)
+	{
+		mColourMod = new myRGB[mMaxDestination];
+		if(mColourMod == NULL)
+		{
+			fprintf(stderr, "Error allocation memory for colour modulation array\n");
+			return;
+		}
+		for(int i = 0; i < mMaxDestination; i++)
+		{
+			mColourMod[i].Red = 255;
+			mColourMod[i].Green = 255;
+			mColourMod[i].Blue = 255;
+			mColourMod[i].modify = false;
+		}
+	}
+	mColourMod[destinationID].Red = R;
+	mColourMod[destinationID].Green = G;
+	mColourMod[destinationID].Blue = B;
+
+	if(R == 255 && G == 255 && B == 255)
+		mColourMod[destinationID].modify = false;
+	else
+		mColourMod[destinationID].modify = true;
+
+}
+
 bool gameLocation::draw(TextureManager* lpTM)
 {
 	SDL_Rect destination, viewport;
 	SDL_Rect* source;
 	int iID;
+	bool resetColourMod = false;
 
 	if(!good() )
 		return false;
@@ -314,6 +361,20 @@ bool gameLocation::draw(TextureManager* lpTM)
 		{
 			source = getSource(mDestinationSource[iID]);
 			destination = getDestination(iID);
+
+			if(mColourMod[iID].modify)
+			{
+				lpTM->ModulateTextureColour(mSource->getTextureID(), mColourMod[iID]);
+				resetColourMod = true;
+			}
+			else if (resetColourMod == true)
+			{
+				lpTM->ModulateTextureColour(mSource->getTextureID(), mColourMod[iID]);
+				resetColourMod = false;
+			}
+			else
+				resetColourMod = false;
+
 			lpTM->RenderTextureToViewport( mSource->getTextureID(), viewport, &destination, source   );
 		}
 	}

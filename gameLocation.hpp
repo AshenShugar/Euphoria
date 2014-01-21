@@ -33,6 +33,7 @@ class gameLocation
 		void setClickable(bool isClickable);
 		virtual bool draw(TextureManager* TM);
 		std::string mFilename;
+		void setColourModulation(int destinationID, int r,int g,int b);
 
 	protected:
 		Pane* getTargetPane(void);
@@ -49,6 +50,7 @@ class gameLocation
 		Pane* mTargetPane;
 		LOCATION_TYPE mType;
 		bool mClickable;
+		myRGB* mColourMod;
 };
 
 #endif

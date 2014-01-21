@@ -24,7 +24,25 @@ numberLocation::numberLocation(std::string filename)
 	digitSource = NULL;
 	mJustification = NULL;
 	LoadFromFile(filename);
+	
 	mJustification = new TEXT_JUSTIFICATION[mMaxDestination];
+	digitSource = new int*[mMaxDestination];
+	digitDestinations = new SDL_Rect*[mMaxDestination];
+	numDigits = new int[mMaxDestination];
+
+	for(int i=0; i < mMaxDestination; i++)
+	{
+		digitSource[i] = new int[1];
+		digitSource[i][0] = 0;
+		digitDestinations[i] = new SDL_Rect[1];
+		digitDestinations[i][0].x = 0;
+		digitDestinations[i][0].y = 0;
+		digitDestinations[i][0].w = 0;
+		digitDestinations[i][0].h = 0;
+		numDigits[i] = 1;
+	}
+
+
 }
 
 numberLocation::~numberLocation()
@@ -113,8 +131,12 @@ bool numberLocation::draw(TextureManager* lpTM)
 	{
 		for(int digitIndex = 0; digitIndex < numDigits[iID]; digitIndex++)
 		{
+fprintf(stderr, "numDigits[%d] = %d\n", iID, numDigits[iID]);
 			source = getSource(digitSource[iID][digitIndex]);
 			destination = digitDestinations[iID][digitIndex];
+fprintf(stderr, "Source number = %d\n", digitSource[iID][digitIndex]);
+fprintf(stderr, "DEST =(%d,%d,%d,%d) ", destination.x,destination.y,destination.w,destination.h);
+fprintf(stderr, "SOURCE = (%d,%d,%d,%d)\n",source->x,source->y,source->w,source->h);
 			lpTM->RenderTextureToViewport( mSource->getTextureID(), viewport, &destination, source   );
 		}
 	}
@@ -145,7 +167,19 @@ void numberLocation::recalculateDigitDestinations(int destinationToReDo)
 			delete[] digitDestinations[destinationToReDo];
 	}
 	else
+	{
 		digitDestinations = new SDL_Rect*[mMaxDestination];
+		// ensure our array of pointers point to null instead of some random memory location
+		for (int i = 0; i < mMaxDestination; i++)
+		{
+			digitDestinations[i] = new SDL_Rect[1];
+			digitDestinations[i][0].x = 0;
+			digitDestinations[i][0].y = 0;
+			digitDestinations[i][0].w = 7;
+			digitDestinations[i][0].h = 8;
+		}
+	}
+
 
 	if(digitSource != NULL)
 	{
@@ -153,8 +187,14 @@ void numberLocation::recalculateDigitDestinations(int destinationToReDo)
 			delete[] digitSource[destinationToReDo];
 	}
 	else
+	{
 		digitSource = new int*[mMaxDestination];
-
+		// ensure our array of pointers point to null instead of some random memory location
+		for (int i = 0; i < mMaxDestination; i++)
+		{
+			digitSource[i] = NULL;
+		}
+	}
 	if(numDigits != NULL)
 		numDigits[destinationToReDo] = -1;
 	else
