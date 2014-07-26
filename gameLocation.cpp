@@ -128,6 +128,18 @@ bool gameLocation::setValueS(int sourceID)
 	return true;
 }
 
+bool gameLocation::clearValues()
+{
+	if ( mDestinationSource == NULL)
+		return false;
+
+	for(int x = 0; x < mMaxDestination; x++)
+	{
+		mDestinationSource[x] = -1;
+	}
+	return true;
+}
+
 void gameLocation::setSourceArray(sprites* source)
 {
 	mSource = source;

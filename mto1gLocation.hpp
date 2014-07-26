@@ -12,8 +12,8 @@ class Mto1gLocation: public gameLocation
 		bool addValue(int sourceID);
 		void calculateDestinations(void);
 		virtual bool setValue(int destinationID, int sourceID); 
-
-
+		int SourceClickedOn(int screenX, int screenY);
+		virtual bool clearValues(void);
 	private:
 		int mNextIndex;
 		int mMaxIndex;

@@ -27,6 +27,7 @@ class gameLocation
 		virtual bool setValue(int destinationID, int sourceID); 
 		virtual bool setValue(int destinationID); // Assume only 1 source
 		virtual bool setValueS(int); // Assume only 1 destination
+		virtual bool clearValues(void);	// remove all the values.
 		bool good(void);
 		LOCATION_TYPE getType(void);
 		bool isClickable(void);
@@ -41,16 +42,16 @@ class gameLocation
 		SDL_Rect* getSource(int sourceID);
 
 		int mBackgroundTextureID;
-		int mMaxDestination;
+		int mMaxDestination;		// the number of destinations in this location.
 		int mDefaultSource;
-		SDL_Rect mBackgroundDestination;
-		SDL_Rect* mDestination;
-		sprites* mSource;
-		int* mDestinationSource;
-		Pane* mTargetPane;
-		LOCATION_TYPE mType;
-		bool mClickable;
-		myRGB* mColourMod;
+		SDL_Rect mBackgroundDestination;	// to allow drawing a background for this location without covering the entire pane.
+		SDL_Rect* mDestination;		// lists the possible destinations for sprites to be displayed in this location.
+		sprites* mSource;		// a list of sprites that may be displayed in this location.
+		int* mDestinationSource;	// lists the source id for what to display in a destination
+		Pane* mTargetPane;		// the pane the location should be drawn too
+		LOCATION_TYPE mType;		// what type of location this is.  Doesn't seem to be used yet.
+		bool mClickable;		// whether this location should respond to mouse clicks.
+		myRGB* mColourMod;		// a list of colour modulations to be applied to the corresponding destinations.
 };
 
 #endif

@@ -10,8 +10,9 @@
 
 #include "myEnum.hpp"
 //#include "gameLocation.hpp"
-#include "mto1gLocation.hpp"
-#include "numberLocation.hpp"
+//#include "mto1gLocation.hpp"
+//#include "numberLocation.hpp"
+#include "gameState.hpp"
 
 //Screen dimension constants
 const int SCREEN_WIDTH = 1024;
@@ -21,14 +22,16 @@ SDL_Renderer* gRenderer = NULL;
 TextureManager* gTM;	// manages loading and freeing all textures
 //The window we'll be rendering to
 SDL_Window* gWindow = NULL;
-int gMousex,gMousey, gMouseState;
+int gMousex,gMousey, gMouseState, gRMouseState;
 
 gameLocation* boardLocation[NUMLOCALS];
 gameLocation* playerStuff[ITEMCOUNT];
+gameState gGameState(NUMLOCALS);
 
 gameLocation* targetedLocal;
 Mto1gLocation* targetedLocal2;
 int targetDestinationID;
+int RtargetDestinationID;
 
 //The window renderer
 
@@ -104,11 +107,17 @@ void mouseEvent(SDL_Event* e)
 		switch( e->type )
 		{
 			case SDL_MOUSEBUTTONDOWN:
-			gMouseState = 1;
+			if( e->button.button == SDL_BUTTON_RIGHT)
+				gRMouseState = 1;
+			else
+				gMouseState = 1;
 			break;
 				
 			case SDL_MOUSEBUTTONUP:
-			gMouseState = 0;
+			if( e->button.button == SDL_BUTTON_RIGHT)
+				gRMouseState = 0;
+			else
+				gMouseState = 0;
 			break;
 		}
 
@@ -127,62 +136,157 @@ bool loadMedia()
 
 
 	boardLocation[WASTESTARS] = new gameLocation("wasteStars.txt");
+	gGameState.SetLocationState( WASTESTARS, boardLocation[WASTESTARS]->getType(), boardLocation[WASTESTARS]);
+
 	boardLocation[ICARITESTARS] = new gameLocation("icariteStars.txt");
+	gGameState.SetLocationState( ICARITESTARS, boardLocation[ICARITESTARS]->getType(), boardLocation[ICARITESTARS]);
+
 	boardLocation[EUPHORIASTARS] = new gameLocation("euphoriaStars.txt");
+	gGameState.SetLocationState( EUPHORIASTARS, boardLocation[EUPHORIASTARS]->getType(), boardLocation[EUPHORIASTARS]);
+
 	boardLocation[SUBSTARS] = new gameLocation("subStars.txt");
+	gGameState.SetLocationState( SUBSTARS, boardLocation[SUBSTARS]->getType(), boardLocation[SUBSTARS]);
+
 	boardLocation[EF1] = new gameLocation("ef1.txt");
+	gGameState.SetLocationState( EF1, boardLocation[EF1]->getType(), boardLocation[EF1]);
+
 	boardLocation[EF2] = new gameLocation("ef2.txt");
+	gGameState.SetLocationState( EF2, boardLocation[EF2]->getType(), boardLocation[EF2]);
 
 	boardLocation[WF1] = new gameLocation("wf1.txt");
+	gGameState.SetLocationState( WF1, boardLocation[WF1]->getType(), boardLocation[WF1]);
+
 	boardLocation[WF2] = new gameLocation("wf2.txt");
+	gGameState.SetLocationState( WF2, boardLocation[WF2]->getType(), boardLocation[WF2]);
+
 	boardLocation[SF1] = new gameLocation("sf1.txt");
+	gGameState.SetLocationState( SF1, boardLocation[SF1]->getType(), boardLocation[SF1]);
+
 	boardLocation[SF2] = new gameLocation("sf2.txt");
+	gGameState.SetLocationState( SF2, boardLocation[SF2]->getType(), boardLocation[SF2]);
+
 	boardLocation[IF1U] = new gameLocation("if1u.txt");
+	gGameState.SetLocationState( IF1U, boardLocation[IF1U]->getType(), boardLocation[IF1U]);
+
 	boardLocation[IF2U] = new gameLocation("if2u.txt");
+	gGameState.SetLocationState( IF2U, boardLocation[IF2U]->getType(), boardLocation[IF2U]);
+
 	boardLocation[IF3U] = new gameLocation("if3u.txt");
+	gGameState.SetLocationState( IF3U, boardLocation[IF3U]->getType(), boardLocation[IF3U]);
+
 	boardLocation[WIND_SALON] = new gameLocation("iwindsalon.txt");
+	gGameState.SetLocationState( WIND_SALON, boardLocation[WIND_SALON]->getType(), boardLocation[WIND_SALON]);
+
 	boardLocation[CLOUD_MINE] = new Mto1gLocation("imine.txt");
+	gGameState.SetLocationState( CLOUD_MINE, boardLocation[CLOUD_MINE]->getType(), boardLocation[CLOUD_MINE]);
+
 	boardLocation[IoHA] = new gameLocation("eioha.txt");
+	gGameState.SetLocationState( IoHA, boardLocation[IoHA]->getType(), boardLocation[IoHA]);
+
 	boardLocation[ETUNNEL] = new gameLocation("edig.txt");
+	gGameState.SetLocationState( ETUNNEL, boardLocation[ETUNNEL]->getType(), boardLocation[ETUNNEL]);
+
 	boardLocation[EF1U] = new gameLocation("ef1u.txt");
+	gGameState.SetLocationState( EF1U, boardLocation[EF1U]->getType(), boardLocation[EF1U]);
+
 	boardLocation[EF2U] = new gameLocation("ef2u.txt");
+	gGameState.SetLocationState( EF2U, boardLocation[EF2U]->getType(), boardLocation[EF2U]);
+
 	boardLocation[GENERATOR] = new Mto1gLocation("egenerator.txt");
+	gGameState.SetLocationState( GENERATOR, boardLocation[GENERATOR]->getType(), boardLocation[GENERATOR]);
+
 	boardLocation[ETUNNELU] = new gameLocation("etu.txt");
+	gGameState.SetLocationState( ETUNNELU, boardLocation[ETUNNELU]->getType(), boardLocation[ETUNNELU]);
+
 	boardLocation[AoFM] = new gameLocation("waofm.txt");
+	gGameState.SetLocationState( AoFM, boardLocation[AoFM]->getType(), boardLocation[AoFM]);
+
 	boardLocation[WTUNNEL] = new gameLocation("wdig.txt");
+	gGameState.SetLocationState( WTUNNEL, boardLocation[WTUNNEL]->getType(), boardLocation[WTUNNEL]);
+
 	boardLocation[WF1U] = new gameLocation("wf1u.txt");
+	gGameState.SetLocationState( WF1U, boardLocation[WF1U]->getType(), boardLocation[WF1U]);
+
 	boardLocation[WF2U] = new gameLocation("wf2u.txt");
+	gGameState.SetLocationState( WF2U, boardLocation[WF2U]->getType(), boardLocation[WF2U]);
+
 	boardLocation[FARM] = new Mto1gLocation("wfarm.txt");
+	gGameState.SetLocationState( FARM, boardLocation[FARM]->getType(), boardLocation[FARM]);
+
 	boardLocation[WTUNNELU] = new gameLocation("wtu.txt");
+	gGameState.SetLocationState( WTUNNELU, boardLocation[WTUNNELU]->getType(), boardLocation[WTUNNELU]);
+
 	boardLocation[FPoHR] = new gameLocation("sfpohr.txt");
+	gGameState.SetLocationState( FPoHR, boardLocation[FPoHR]->getType(), boardLocation[FPoHR]);
+
 	boardLocation[SUBTUNNEL] = new gameLocation("sdig.txt");
+	gGameState.SetLocationState( SUBTUNNEL, boardLocation[SUBTUNNEL]->getType(), boardLocation[SUBTUNNEL]);
+
 	boardLocation[SF1U] = new gameLocation("sf1u.txt");
+	gGameState.SetLocationState( SF1U, boardLocation[SF1U]->getType(), boardLocation[SF1U]);
+
 	boardLocation[SF2U] = new gameLocation("sf2u.txt");
+	gGameState.SetLocationState( SF2U, boardLocation[SF2U]->getType(), boardLocation[SF2U]);
+
 	boardLocation[AQUIFER] = new Mto1gLocation("saquifer.txt");
+	gGameState.SetLocationState( AQUIFER, boardLocation[AQUIFER]->getType(), boardLocation[AQUIFER]);
+
 	boardLocation[SUBTUNNELU] = new gameLocation("stu.txt");
+	gGameState.SetLocationState( SUBTUNNELU, boardLocation[SUBTUNNELU]->getType(), boardLocation[SUBTUNNELU]);
+
 	boardLocation[WORKER_ACTIVATE] = new gameLocation("workeractivate.txt");
+	gGameState.SetLocationState( WORKER_ACTIVATE, boardLocation[WORKER_ACTIVATE]->getType(), boardLocation[WORKER_ACTIVATE]);
+
 	boardLocation[E_TRACK] = new gameLocation("etrack.txt");
+	gGameState.SetLocationState( E_TRACK, boardLocation[E_TRACK]->getType(), boardLocation[E_TRACK]);
+
 	boardLocation[S_TRACK] = new gameLocation("strack.txt");
+	gGameState.SetLocationState( S_TRACK, boardLocation[S_TRACK]->getType(), boardLocation[S_TRACK]);
+
 	boardLocation[W_TRACK] = new gameLocation("wtrack.txt");
+	gGameState.SetLocationState( W_TRACK, boardLocation[W_TRACK]->getType(), boardLocation[W_TRACK]);
+
 	boardLocation[I_TRACK] = new gameLocation("itrack.txt");
+	gGameState.SetLocationState( I_TRACK, boardLocation[I_TRACK]->getType(), boardLocation[I_TRACK]);
 
 	boardLocation[ST_TRACK] = new gameLocation("WTTrack.txt");
+	gGameState.SetLocationState( ST_TRACK, boardLocation[ST_TRACK]->getType(), boardLocation[ST_TRACK]);
+
 	boardLocation[WT_TRACK] = new gameLocation("ETTrack.txt");
+	gGameState.SetLocationState( WT_TRACK, boardLocation[WT_TRACK]->getType(), boardLocation[WT_TRACK]);
+
 	boardLocation[ET_TRACK] = new gameLocation("STTrack.txt");
+	gGameState.SetLocationState( ET_TRACK, boardLocation[ET_TRACK]->getType(), boardLocation[ET_TRACK]);
 
 	boardLocation[PLAYER_ARTIFACTS] = new gameLocation("partifacts.txt");
+	gGameState.SetLocationState( PLAYER_ARTIFACTS, boardLocation[PLAYER_ARTIFACTS]->getType(), boardLocation[PLAYER_ARTIFACTS]);
+
 	boardLocation[PLAYER_DILEMMA] = new gameLocation("pdilemma.txt");
+	gGameState.SetLocationState( PLAYER_DILEMMA, boardLocation[PLAYER_DILEMMA]->getType(), boardLocation[PLAYER_DILEMMA]);
+
 	boardLocation[PLAYER_WORKERS] = new gameLocation("pworkers.txt");
+	gGameState.SetLocationState( PLAYER_WORKERS, boardLocation[PLAYER_WORKERS]->getType(), boardLocation[PLAYER_WORKERS]);
+
 	boardLocation[PLAYER_RESOURCES] = new numberLocation("presources.txt");
+	gGameState.SetLocationState( PLAYER_RESOURCES, boardLocation[PLAYER_RESOURCES]->getType(), boardLocation[PLAYER_RESOURCES]);
+
 	boardLocation[PLAYER_RECRUITS] = new gameLocation("precruits.txt");
+	gGameState.SetLocationState( PLAYER_RECRUITS, boardLocation[PLAYER_RECRUITS]->getType(), boardLocation[PLAYER_RECRUITS]);
+
 	boardLocation[MARKET_TILES] = new gameLocation("factoryTiles.txt");
+	gGameState.SetLocationState( MARKET_TILES, boardLocation[MARKET_TILES]->getType(), boardLocation[MARKET_TILES]);
+
 	boardLocation[MARKET_STARS] = new gameLocation("FactoryStars.txt");
+	gGameState.SetLocationState( MARKET_STARS, boardLocation[MARKET_STARS]->getType(), boardLocation[MARKET_STARS]);
+
 	boardLocation[BLOCKED_LOCATIONS] = new gameLocation("BlockedLocations.txt");
+	gGameState.SetLocationState( BLOCKED_LOCATIONS, boardLocation[BLOCKED_LOCATIONS]->getType(), boardLocation[BLOCKED_LOCATIONS]);
 
 
 	
 	targetedLocal = NULL;
 	targetDestinationID = -1;
+	RtargetDestinationID = -1;
 
 	for(int i = 0; i<6; i++)
 	{
@@ -224,7 +328,7 @@ void close()
 // Not sure what else might happen.
 void update(Uint32 tDelta)
 {
-
+	gGameState.SyncLocations();
 }
 
 int main( int argc, char* args[] )
@@ -253,7 +357,10 @@ int main( int argc, char* args[] )
 	tmpR.w = 10;
 	tmpR.h = 10;
 
+			locationState* tmpLS;
+			// game board
 			Pane aPane(0,0,804,700);
+			// players area
 			Pane bPane(804,0,SCREEN_WIDTH - 804,700);
 
 			sprites playerStars("playerStars.txt");
@@ -313,6 +420,31 @@ int main( int argc, char* args[] )
 			((numberLocation*)(boardLocation[PLAYER_RESOURCES]))->setJustification(4,RIGHT_JUSTIFY);
 			((numberLocation*)(boardLocation[PLAYER_RESOURCES]))->setJustification(5,RIGHT_JUSTIFY);
 			((numberLocation*)(boardLocation[PLAYER_RESOURCES]))->setJustification(6,RIGHT_JUSTIFY);
+
+
+			tmpLS = gGameState.GetLocationX(BLOCKED_LOCATIONS);
+
+			if( tmpLS != NULL)
+			{
+				if (!tmpLS->addStateValue(3, 1, NULL))
+					fprintf(stderr,"Awooga1\n");
+				if (!tmpLS->addStateValue(4, 1, NULL))
+					fprintf(stderr,"Awooga2\n");
+				if (!tmpLS->addStateValue(5, 1, NULL))
+					fprintf(stderr,"Awooga2\n");
+				if (!tmpLS->addStateValue(6, 1, NULL))
+					fprintf(stderr,"Awooga2\n");
+				if (!tmpLS->addStateValue(7, 2, NULL))
+					fprintf(stderr,"Awooga2\n");
+				if (!tmpLS->addStateValue(8, 2, NULL))
+					fprintf(stderr,"Awooga2\n");
+				if (!tmpLS->addStateValue(9, 2, NULL))
+					fprintf(stderr,"Awooga2\n");
+			}
+			else
+			{
+fprintf(stderr,"Error getting location X\n");
+			}
 
 
 			// variables to track timing incase I want to animate anything.
@@ -408,6 +540,25 @@ int main( int argc, char* args[] )
 // testing stuff
 if(true)
 {
+				if(gRMouseState == 1 && RtargetDestinationID == -1)
+				{
+					RtargetDestinationID = 1;
+					fprintf(stderr, "Right Mouse Down happened at x=%d, y=%d\n", gMousex,gMousey);
+					int sourceID = ((Mto1gLocation*)boardLocation[GENERATOR])->SourceClickedOn(gMousex,gMousey);
+
+					if(sourceID != -1 )
+					{
+
+						((Mto1gLocation*)boardLocation[GENERATOR])->removeValue(sourceID);
+					}
+
+
+				}
+				if(gRMouseState == 0 && RtargetDestinationID > -1)
+				{
+					RtargetDestinationID = -1;
+				}
+
 				if(gMouseState == 1 && targetDestinationID == -1)
 				{
 					fprintf(stderr,"x=%d,y=%d\n",gMousex,gMousey);

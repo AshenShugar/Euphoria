@@ -131,12 +131,8 @@ bool numberLocation::draw(TextureManager* lpTM)
 	{
 		for(int digitIndex = 0; digitIndex < numDigits[iID]; digitIndex++)
 		{
-fprintf(stderr, "numDigits[%d] = %d\n", iID, numDigits[iID]);
 			source = getSource(digitSource[iID][digitIndex]);
 			destination = digitDestinations[iID][digitIndex];
-fprintf(stderr, "Source number = %d\n", digitSource[iID][digitIndex]);
-fprintf(stderr, "DEST =(%d,%d,%d,%d) ", destination.x,destination.y,destination.w,destination.h);
-fprintf(stderr, "SOURCE = (%d,%d,%d,%d)\n",source->x,source->y,source->w,source->h);
 			lpTM->RenderTextureToViewport( mSource->getTextureID(), viewport, &destination, source   );
 		}
 	}
@@ -273,5 +269,18 @@ bool numberLocation::setValue(int someNumber)
 	mDestinationSource[0] = someNumber;
 	recalculateDigitDestinations(0);
 
+	return true;
+}
+
+bool numberLocation::clearValues(void)
+{
+	if(mDestinationSource == NULL)
+		return false;
+
+	for(int x = 0; x < mMaxDestination; x++)
+	{
+		mDestinationSource[x] = 0;
+		recalculateDigitDestinations(x);
+	}
 	return true;
 }

@@ -13,6 +13,7 @@ class numberLocation: public gameLocation
 		virtual bool draw(TextureManager* TM);
 		virtual bool setValue(int someNumber);
 		virtual bool setValue(int destinationID, int someNumber);
+		virtual bool clearValues(void);
 
 		void recalculateDigitDestinations(int DestinationToReDo);
 	protected:

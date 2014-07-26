@@ -4,6 +4,7 @@
 const int NUMLOCALS = 61;
 const int ITEMCOUNT = 4;
 
+
 enum myEDGE
 {
 	NOEDGE = -1,
@@ -23,11 +24,11 @@ enum TEXT_JUSTIFICATION
 enum LOCATION_TYPE
 {
 	NOTSET = 0,
-	OVtoML = 1,
-	MVtoOL = 2,
-	MVtoML = 3,
-	OVtoOL = 4,
-	MCVtoOL = 5		// Many concurrent values in one location
+	NMVtoML = 1,	// Numeric Many Value to Many Locations
+	UNUSED = 2,	//
+	MVtoML = 3,	// Many Value to Many Location, 
+	OVtoOL = 4,	// One Value to One Location, not sure it's used
+	MCVtoOL = 5	// Many concurrent values in one location, when you need to squeeze multiple objects into one particular area. (Euphoria Mines)
 };
 
 enum BOARD_LOCATIONS
